@@ -1,25 +1,47 @@
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.17)
 
-project(wlpp VERSION 0.0.1)
+project(wlpp VERSION 0.0.1 LANGUAGES CXX)
 
-add_library(wlpp SHARED src/connection.cpp include/wlpp/connection.hpp src/screen.cpp include/wlpp/screen.hpp src/window.cpp include/wlpp/window.hpp)
-target_link_libraries(wlpp PUBLIC xcb)
+# Options ----------------------------------------------------------------------
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+option(WLPP_INSTALL "Generate installation target" ON)
 
-#add_library(wlpp_comp_flags INTERFACE)
-#target_compile_features(wlpp_comp_flags INTERFACE cxx_std_20)
-#set(gcc_like_cxx "$<COMPILE_LANG_AND_ID:CXX,ARMClang,AppleClang,Clang,GNU>")
-#set(msvc_cxx "$<COMPILE_LANG_AND_ID:CXX,MSVC>")
-#target_compile_options(wlpp_comp_flags INTERFACE
-#                       "$<${gcc_like_cxx}:$<BUILD_INTERFACE:-Wextra;-Wall;-Wpedantic;-march=native;-O3>>"
-#                       "$<${msvc_cxx}:$<BUILD_INTERFACE:-W3>>")
-#
-#target_link_libraries(wlpp INTERFACE wlpp_comp_flags)
+set(WLPP_LIB_NAME wlpp)
 
-install(TARGETS wlpp DESTINATION lib)
-install(DIRECTORY include/ DESTINATION include)
+# Select API -------------------------------------------------------------------
+if(UNIX)
+    message(STATUS "Unix platform detected - using XCB")
+elseif(WIN32)
+    message(STATUS "Windows platform detected - using Win32")
+else()
+    message(FATAL_ERROR "No supported platform detected")
+endif()
 
-include(InstallRequiredSystemLibraries)
-#set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
-set(CPACK_PACKAGE_VERSION_MAJOR "${wlpp_VERSION_MAJOR}")
-set(CPACK_PACKAGE_VERSION_MINOR "${wlpp_VERSION_MINOR}")
-include(CPack)
+# Generate package files -------------------------------------------------------
+include(CMakePackageConfigHelpers)
+include(GNUInstallDirs)
+
+set(WLPP_CONFIG_PATH "${CMAKE_INSTALL_LIBDIR}/cmake/wlpp")
+
+configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/wlppConfig.cmake.in
+        src/wlppConfig.cmake
+        INSTALL_DESTINATION "${WLPP_CONFIG_PATH}"
+        NO_CHECK_REQUIRED_COMPONENTS_MACRO) #NO_SET_AND_CHECK_MACRO
+
+write_basic_package_version_file(src/wlppConfigVersion.cmake
+        VERSION ${WLPP_VERSION}
+        COMPATIBILITY SameMajorVersion)
+
+# Add subdirectory -------------------------------------------------------------
+add_subdirectory(src)
+
+# Install package and headers --------------------------------------------------
+if(WLPP_INSTALL)
+    install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+    install(FILES "${CMAKE_BINARY_DIR}/src/wlppConfig.cmake"
+            "${CMAKE_BINARY_DIR}/src/wlppConfigVersion.cmake"
+            DESTINATION "${WLPP_CONFIG_PATH}")
+    install(EXPORT wlppTargets FILE wlppTargets.cmake
+            NAMESPACE wlpp::
+            DESTINATION ${WLPP_CONFIG_PATH})
+endif()
