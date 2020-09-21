@@ -20,7 +20,8 @@ endif()
 # Set properties ---------------------------------------------------------------
 set_target_properties(wlpp PROPERTIES
         OUTPUT_NAME ${WLPP_LIB_NAME}
-        VERSION ${WLPP_VERSION_MAJOR}.${WLPP_VERSION_MINOR}) #POSITION_INDEPENDENT_CODE ON
+        VERSION ${wlpp_VERSION_MAJOR}.${wlpp_VERSION_MINOR}
+        SOVERSION ${wlpp_VERSION_MAJOR}) #POSITION_INDEPENDENT_CODE ON
 
 # Install library --------------------------------------------------------------
 if(WLPP_INSTALL)
