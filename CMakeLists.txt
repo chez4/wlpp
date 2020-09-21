@@ -3,14 +3,18 @@ cmake_minimum_required(VERSION 3.17)
 project(wlpp VERSION 0.0.1 LANGUAGES CXX)
 
 # Options ----------------------------------------------------------------------
-option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 option(WLPP_INSTALL "Generate installation target" ON)
 
 set(WLPP_LIB_NAME wlpp)
 
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
 # Select API -------------------------------------------------------------------
 if(UNIX)
     message(STATUS "Unix platform detected - using XCB")
+
+    find_package(XCB REQUIRED)
 elseif(WIN32)
     message(STATUS "Windows platform detected - using Win32")
 else()
@@ -42,6 +46,7 @@ if(WLPP_INSTALL)
             "${CMAKE_BINARY_DIR}/src/wlppConfigVersion.cmake"
             DESTINATION "${WLPP_CONFIG_PATH}")
     install(EXPORT wlppTargets FILE wlppTargets.cmake
+            EXPORT_LINK_INTERFACE_LIBRARIES
             NAMESPACE wlpp::
             DESTINATION ${WLPP_CONFIG_PATH})
 endif()

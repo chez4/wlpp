@@ -1,6 +1,14 @@
 # Add library ------------------------------------------------------------------
 add_library(wlpp window.cpp)
 
+target_include_directories(wlpp PUBLIC
+        "$<BUILD_INTERFACE:${wlpp_SOURCE_DIR}/include>"
+        "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
+target_include_directories(wlpp PRIVATE
+        "${wlpp_SOURCE_DIR}/src"
+        "${wlpp_BINARY_DIR}/src"
+        ${wlpp_INCLUDE_DIRS})
+
 add_library(wlpp_comp_flags INTERFACE)
 target_compile_features(wlpp_comp_flags INTERFACE cxx_std_20)
 set(gcc_like_cxx "$<COMPILE_LANG_AND_ID:CXX,ARMClang,AppleClang,Clang,GNU>")
@@ -10,9 +18,12 @@ target_compile_options(wlpp_comp_flags INTERFACE
         "$<${msvc_cxx}:$<BUILD_INTERFACE:-O2;-std:c++20>>")
 target_link_libraries(wlpp INTERFACE wlpp_comp_flags)
 
+# Choose platform-specific sources and libraries -------------------------------
 if(UNIX)
     target_sources(wlpp PRIVATE xcb/xcb_connection.cpp xcb/xcb_window.cpp
             xcb/xcb_screen.cpp)
+
+    target_link_libraries(wlpp PUBLIC xcb::xcb)
 elseif(WIN32)
     #target_sources(wlpp PRIVATE )
 endif()

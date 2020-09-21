@@ -1,5 +1,10 @@
-#include "../include/wlpp/window.hpp"
+#include <wlpp/window.hpp>
 
 namespace wlpp {
+
+window::window()
+{
+
+}
 
 }

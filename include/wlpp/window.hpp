@@ -3,7 +3,12 @@
 
 namespace wlpp {
 
-class window {};
+class window {
+private:
+
+public:
+    window();
+};
 
 }
 
