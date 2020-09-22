@@ -12,7 +12,7 @@
 
 #include <xcb/xcb.h>
 
-#include <wlpp/window_api_error.hpp>
+#include <window_api_error.hpp>
 #include <wlpp/xcb/xcb_screen.hpp>
 
 namespace wlpp {

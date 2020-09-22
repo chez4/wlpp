@@ -3,7 +3,7 @@
  * See LICENSE for more information.
  */
 
-#include <wlpp/window_api_error.hpp>
+#include <window_api_error.hpp>
 
 #include <exception>
 #include <string>
