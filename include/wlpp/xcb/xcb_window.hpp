@@ -5,11 +5,12 @@
 
 #include <xcb/xcb.h>
 
-#include "xcb_connection.hpp"
+#include <wlpp/xcb/xcb_connection.hpp>
 
 namespace wlpp {
 
 class xcb_window {
+private:
     xcb_window_t *window;
 
     std::shared_ptr<xcb_connection> server;

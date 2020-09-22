@@ -6,6 +6,7 @@
 namespace wlpp {
 
 class xcb_screen {
+private:
     xcb_screen_t *screen;
 
 public:

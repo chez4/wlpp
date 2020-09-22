@@ -5,11 +5,12 @@
 
 #include <xcb/xcb.h>
 
-#include "xcb_screen.hpp"
+#include <wlpp/xcb/xcb_screen.hpp>
 
 namespace wlpp {
 
 class xcb_connection {
+private:
     xcb_connection_t *connection;
     int *screen_pref;
 
@@ -27,6 +28,8 @@ public:
     xcb_connection &operator=(xcb_connection);
 
     friend void swap(xcb_connection &, xcb_connection &);
+
+    xcb_connection_t *get() const;
 
     std::uint32_t generate_id() const;
 

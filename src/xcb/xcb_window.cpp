@@ -1,10 +1,11 @@
+#include <wlpp/xcb/xcb_window.hpp>
+
 #include <memory>
 #include <utility>
 
 #include <xcb/xcb.h>
 
-#include "../../include/wlpp/xcb/xcb_connection.hpp"
-#include "../../include/wlpp/xcb/xcb_window.hpp"
+#include <wlpp/xcb/xcb_connection.hpp>
 
 namespace wlpp {
 
@@ -17,7 +18,7 @@ xcb_window::xcb_window(std::shared_ptr<xcb_connection> server)
 
 xcb_window::~xcb_window()
 {
-    //xcb_destroy_window();
+    xcb_destroy_window(server->get(), *window);
 }
 
 xcb_window::xcb_window(xcb_window &&other) noexcept

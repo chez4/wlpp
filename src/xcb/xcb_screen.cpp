@@ -1,4 +1,4 @@
-#include "../../include/wlpp/xcb/xcb_screen.hpp"
+#include <wlpp/xcb/xcb_screen.hpp>
 
 namespace wlpp {
 

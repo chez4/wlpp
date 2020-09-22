@@ -35,7 +35,7 @@ set(WLPP_CONFIG_PATH "${CMAKE_INSTALL_LIBDIR}/cmake/wlpp")
 configure_package_config_file(CMake/wlppConfig.cmake.in
         src/wlppConfig.cmake
         INSTALL_DESTINATION "${WLPP_CONFIG_PATH}"
-        NO_CHECK_REQUIRED_COMPONENTS_MACRO) #NO_SET_AND_CHECK_MACRO
+        NO_CHECK_REQUIRED_COMPONENTS_MACRO)
 
 write_basic_package_version_file(src/wlppConfigVersion.cmake
         VERSION ${wlpp_VERSION}

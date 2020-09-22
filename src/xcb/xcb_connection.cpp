@@ -1,11 +1,12 @@
+#include <wlpp/xcb/xcb_connection.hpp>
+
 #include <utility>
 
 #include <cstdint>
 
 #include <xcb/xcb.h>
 
-#include "../../include/wlpp/xcb/xcb_connection.hpp"
-#include "../../include/wlpp/xcb/xcb_screen.hpp"
+#include <wlpp/xcb/xcb_screen.hpp>
 
 namespace wlpp {
 
@@ -44,6 +45,11 @@ void swap(xcb_connection &a, xcb_connection &b)
     std::swap(a.connection, b.connection);
     std::swap(a.screen_pref, b.screen_pref);
     std::swap(a.setup, b.setup);
+}
+
+xcb_connection_t *xcb_connection::get() const
+{
+    return connection;
 }
 
 std::uint32_t xcb_connection::generate_id() const
