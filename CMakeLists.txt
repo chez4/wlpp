@@ -11,10 +11,15 @@ set(WLPP_LIB_NAME wlpp)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 # Select API -------------------------------------------------------------------
+list(APPEND CMAKE_MODULE_PATH "${wlpp_SOURCE_DIR}/CMake")
+
 if(UNIX)
     message(STATUS "Unix platform detected - using XCB")
 
     find_package(XCB REQUIRED)
+    if (NOT XCB_FOUND)
+        message(FATAL_ERROR "XCB library was not found")
+    endif()
 elseif(WIN32)
     message(STATUS "Windows platform detected - using Win32")
 else()
@@ -27,7 +32,7 @@ include(GNUInstallDirs)
 
 set(WLPP_CONFIG_PATH "${CMAKE_INSTALL_LIBDIR}/cmake/wlpp")
 
-configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/wlppConfig.cmake.in
+configure_package_config_file(CMake/wlppConfig.cmake.in
         src/wlppConfig.cmake
         INSTALL_DESTINATION "${WLPP_CONFIG_PATH}"
         NO_CHECK_REQUIRED_COMPONENTS_MACRO) #NO_SET_AND_CHECK_MACRO
