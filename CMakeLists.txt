@@ -1,3 +1,6 @@
+# wlpp Copyright 2020 Max Burns
+# See LICENSE for more information.
+
 cmake_minimum_required(VERSION 3.17)
 
 project(wlpp VERSION 0.0.1 LANGUAGES CXX)

@@ -1,3 +1,6 @@
+# wlpp Copyright 2020 Max Burns
+# See LICENSE for more information.
+
 # Find XCB library using pkg-config --------------------------------------------
 # Sets the following variables:
 #   XCB_FOUND (if found)

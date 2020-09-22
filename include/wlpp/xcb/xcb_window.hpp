@@ -1,3 +1,8 @@
+/*
+ * wlpp Copyright 2020 Max Burns
+ * See LICENSE for more information.
+ */
+
 #ifndef WLPP_XCB_WINDOW_HPP
 #define WLPP_XCB_WINDOW_HPP
 
@@ -11,7 +16,7 @@ namespace wlpp {
 
 class xcb_window {
 private:
-    xcb_window_t *window;
+    xcb_window_t *p_window;
 
     std::shared_ptr<xcb_connection> server;
 
