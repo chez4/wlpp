@@ -12,7 +12,9 @@ class window {
 private:
 
 public:
-    window();
+    virtual void show() const = 0;
+
+    virtual void hide() const = 0;
 };
 
 }

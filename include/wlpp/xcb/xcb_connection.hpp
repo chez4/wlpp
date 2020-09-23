@@ -14,12 +14,14 @@
 
 namespace wlpp {
 
+class xcb_window;
+
 class xcb_connection {
 private:
-    xcb_connection_t *p_connection;
+    xcb_connection_t *conn;
     int screen_pref;
 
-    const xcb_setup_t *p_setup;
+    const xcb_setup_t *setup;
 
 public:
     xcb_connection();
@@ -36,11 +38,17 @@ public:
 
     xcb_connection_t *get() const;
 
+    void flush() const;
+
     std::uint32_t generate_id() const;
 
     xcb_screen get_screen(int) const;
 
     xcb_screen get_default_screen() const;
+
+    void map_window(const xcb_window &) const;
+
+    void unmap_window(const xcb_window &) const;
 };
 
 }

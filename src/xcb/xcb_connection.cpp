@@ -8,37 +8,39 @@
 #include <string>
 #include <utility>
 
+#include <iostream>
+
 #include <cstdint>
 
 #include <xcb/xcb.h>
 
 #include <window_api_error.hpp>
 #include <wlpp/xcb/xcb_screen.hpp>
+#include <wlpp/xcb/xcb_window.hpp>
 
 namespace wlpp {
 
 xcb_connection::xcb_connection()
     : screen_pref()
 {
-    p_connection = xcb_connect(nullptr, &screen_pref);
-
-    p_setup = xcb_get_setup(p_connection);
+    conn = xcb_connect(nullptr, &screen_pref);
+    setup = xcb_get_setup(conn);
 }
 
 xcb_connection::~xcb_connection()
 {
-    if (p_connection != nullptr) {
-        xcb_disconnect(p_connection);
+    if (conn != nullptr) {
+        xcb_disconnect(conn);
     }
 }
 
 xcb_connection::xcb_connection(xcb_connection &&other) noexcept
-    : p_connection(other.p_connection)
+    : conn(other.conn)
     , screen_pref(other.screen_pref)
-    , p_setup(other.p_setup)
+    , setup(other.setup)
 {
-    other.p_connection = nullptr;
-    other.p_setup = nullptr;
+    other.conn = nullptr;
+    other.setup = nullptr;
 }
 
 xcb_connection &xcb_connection::operator=(xcb_connection other)
@@ -49,24 +51,29 @@ xcb_connection &xcb_connection::operator=(xcb_connection other)
 
 void swap(xcb_connection &a, xcb_connection &b)
 {
-    std::swap(a.p_connection, b.p_connection);
+    std::swap(a.conn, b.conn);
     std::swap(a.screen_pref, b.screen_pref);
-    std::swap(a.p_setup, b.p_setup);
+    std::swap(a.setup, b.setup);
 }
 
 xcb_connection_t *xcb_connection::get() const
 {
-    return p_connection;
+    return conn;
+}
+
+void xcb_connection::flush() const
+{
+    xcb_flush(conn);
 }
 
 std::uint32_t xcb_connection::generate_id() const
 {
-    return xcb_generate_id(p_connection);
+    return xcb_generate_id(conn);
 }
 
 xcb_screen xcb_connection::get_screen(int num) const
 {
-    xcb_screen_iterator_t iter = xcb_setup_roots_iterator(p_setup);
+    xcb_screen_iterator_t iter = xcb_setup_roots_iterator(setup);
     while (iter.rem >= 0) {
         if (num == iter.rem)
             return xcb_screen(*iter.data);
@@ -79,6 +86,16 @@ xcb_screen xcb_connection::get_screen(int num) const
 xcb_screen xcb_connection::get_default_screen() const
 {
     return get_screen(screen_pref);
+}
+
+void xcb_connection::map_window(const xcb_window &wind) const
+{
+    xcb_map_window(conn, wind.get());
+}
+
+void xcb_connection::unmap_window(const xcb_window &wind) const
+{
+    xcb_unmap_window(conn, wind.get());
 }
 
 }

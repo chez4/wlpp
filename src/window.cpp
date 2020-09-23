@@ -7,9 +7,4 @@
 
 namespace wlpp {
 
-window::window()
-{
-
-}
-
 }

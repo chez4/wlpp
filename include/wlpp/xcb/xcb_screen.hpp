@@ -12,10 +12,14 @@ namespace wlpp {
 
 class xcb_screen {
 private:
-    xcb_screen_t *p_screen;
+    xcb_screen_t screen;
 
 public:
-    xcb_screen(const xcb_screen_t &);
+    explicit xcb_screen(const xcb_screen_t &);
+
+    xcb_window_t get_parent_window() const;
+
+    xcb_visualid_t get_parent_visual() const;
 };
 
 }
