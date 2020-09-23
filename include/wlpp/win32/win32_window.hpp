@@ -26,6 +26,10 @@ public:
     win32_window &operator=(win32_window);
 
     friend void swap(win32_window &, win32_window &);
+
+    void show() const override;
+
+    void hide() const override;
 };
 
 }

@@ -20,6 +20,8 @@ if(UNIX)
     target_link_libraries(wlpp PUBLIC ${PKG_XCB_LIBRARIES})
 elseif(WIN32)
     target_sources(wlpp PRIVATE win32/win32_window.cpp)
+
+    target_link_libraries(wlpp PRIVATE Threads::Threads)
 endif()
 
 # Set properties ---------------------------------------------------------------
