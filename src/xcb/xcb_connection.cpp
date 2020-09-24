@@ -8,8 +8,6 @@
 #include <string>
 #include <utility>
 
-#include <iostream>
-
 #include <cstdint>
 
 #include <xcb/xcb.h>

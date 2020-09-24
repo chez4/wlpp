@@ -8,6 +8,8 @@
 
 #include <memory>
 
+#include <cstdint>
+
 #include <xcb/xcb.h>
 
 #include <wlpp/window.hpp>
@@ -22,8 +24,16 @@ private:
 
     std::shared_ptr<xcb_connection> server;
 
+    template <typename T>
+    void change_property(const xcb_atom_enum_t &property, const xcb_atom_enum_t &type, T data) const
+    {
+        xcb_change_property(server->get(), XCB_PROP_MODE_REPLACE, wind, property, type, 8, sizeof(T), data);
+    }
+
 public:
-    xcb_window(std::shared_ptr<xcb_connection>, const xcb_screen &);
+    xcb_window(std::shared_ptr<xcb_connection>, const xcb_screen &, std::uint16_t, std::uint16_t, std::uint16_t, std::uint16_t, std::uint16_t);
+    xcb_window(std::shared_ptr<xcb_connection>, const xcb_screen &, std::uint16_t, std::uint16_t, std::uint16_t, std::uint16_t);
+    xcb_window(std::shared_ptr<xcb_connection>, const xcb_screen &, std::uint16_t, std::uint16_t);
 
     ~xcb_window();
 
