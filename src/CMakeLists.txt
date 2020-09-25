@@ -17,7 +17,7 @@ if(UNIX)
     target_sources(wlpp PRIVATE xcb/xcb_connection.cpp xcb/xcb_window.cpp
             xcb/xcb_screen.cpp)
 
-    target_link_libraries(wlpp PUBLIC ${PKG_XCB_LIBRARIES})
+    target_link_libraries(wlpp PRIVATE ${PKG_XCB_LIBRARIES})
 elseif(WIN32)
     target_sources(wlpp PRIVATE win32/win32_window.cpp)
 

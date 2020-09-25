@@ -31,7 +31,7 @@ win32_window::win32_window()
     RegisterClass(&wc);
 
     wind = CreateWindowEx(0, CLASS_NAME, "Learn to Program Windows", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, nullptr, nullptr, GetModuleHandle(nullptr), nullptr);
-    ShowWindow(wind, 0);
+    ShowWindow(wind, 1);
 
     MSG msg = { };
     while (GetMessage(&msg, nullptr, 0, 0))
