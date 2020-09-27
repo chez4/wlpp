@@ -72,7 +72,7 @@ std::uint32_t xcb_connection::generate_id() const
 xcb_screen xcb_connection::get_screen(int num) const
 {
     xcb_screen_iterator_t iter = xcb_setup_roots_iterator(setup);
-    while (iter.rem >= 0) {
+    while (iter.rem >= 0) { // TODO: This is the wrong way around
         if (num == iter.rem)
             return xcb_screen(*iter.data);
         xcb_screen_next(&iter);

@@ -2,7 +2,7 @@
 # See LICENSE for more information.
 
 # Add library ------------------------------------------------------------------
-add_library(wlpp window.cpp window_api_error.cpp)
+add_library(wlpp window_api_error.cpp)
 
 target_include_directories(wlpp PUBLIC
         "$<BUILD_INTERFACE:${wlpp_SOURCE_DIR}/include>"

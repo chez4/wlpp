@@ -9,12 +9,16 @@
 namespace wlpp {
 
 class window {
-private:
-
 public:
+    virtual void poll_events() const = 0;
+
+    virtual void wait_events() const = 0;
+
     virtual void show() const = 0;
 
     virtual void hide() const = 0;
+
+    virtual bool has_closed() const = 0;
 };
 
 }

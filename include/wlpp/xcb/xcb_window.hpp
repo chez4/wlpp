@@ -63,6 +63,10 @@ public:
 
     xcb_window_t get() const;
 
+    void poll_events() const override;
+
+    void wait_events() const override;
+
     void show() const override;
 
     void hide() const override;

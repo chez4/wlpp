@@ -48,7 +48,7 @@ xcb_window::xcb_window(xcb_window &&other) noexcept
 
 xcb_window &xcb_window::operator=(xcb_window other)
 {
-    if (this == &other) swap(*this, other);
+    if (this != &other) swap(*this, other);
     return *this;
 }
 
