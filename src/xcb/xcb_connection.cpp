@@ -20,6 +20,7 @@ namespace wlpp {
 
 xcb_connection::xcb_connection()
     : screen_pref()
+    , windows()
 {
     conn = xcb_connect(nullptr, &screen_pref);
     setup = xcb_get_setup(conn);
@@ -72,8 +73,9 @@ std::uint32_t xcb_connection::generate_id() const
 xcb_screen xcb_connection::get_screen(int num) const
 {
     xcb_screen_iterator_t iter = xcb_setup_roots_iterator(setup);
-    while (iter.rem >= 0) { // TODO: This is the wrong way around
-        if (num == iter.rem)
+    int screens = iter.rem;
+    while (iter.rem >= 0) {
+        if (num == screens - iter.rem)
             return xcb_screen(*iter.data);
         xcb_screen_next(&iter);
     }
@@ -84,6 +86,18 @@ xcb_screen xcb_connection::get_screen(int num) const
 xcb_screen xcb_connection::get_default_screen() const
 {
     return get_screen(screen_pref);
+}
+
+void xcb_connection::poll_events() const
+{
+    xcb_generic_event_t *event = xcb_poll_for_event(conn);
+    delete event;
+}
+
+void xcb_connection::wait_events() const
+{
+    xcb_generic_event_t *event = xcb_wait_for_event(conn);
+    delete event;
 }
 
 void xcb_connection::map_window(const xcb_window &wind) const

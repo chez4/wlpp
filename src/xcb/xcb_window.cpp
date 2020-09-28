@@ -63,6 +63,15 @@ xcb_window_t xcb_window::get() const
     return wind;
 }
 
+void xcb_window::poll_events() const
+{
+
+}
+
+void xcb_window::wait_events() const
+{
+}
+
 void xcb_window::show() const
 {
     server->map_window(*this);
@@ -71,6 +80,11 @@ void xcb_window::show() const
 void xcb_window::hide() const
 {
     server->unmap_window(*this);
+}
+
+bool xcb_window::has_closed() const
+{
+    return false;
 }
 
 }

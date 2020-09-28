@@ -6,6 +6,8 @@
 #ifndef WLPP_XCB_CONNECTION_HPP
 #define WLPP_XCB_CONNECTION_HPP
 
+#include <vector>
+
 #include <cstdint>
 
 #include <xcb/xcb.h>
@@ -22,6 +24,8 @@ private:
     int screen_pref;
 
     const xcb_setup_t *setup;
+
+    std::vector<const xcb_window *> windows;
 
 public:
     xcb_connection();
@@ -45,6 +49,10 @@ public:
     xcb_screen get_screen(int) const;
 
     xcb_screen get_default_screen() const;
+
+    void poll_events() const;
+
+    void wait_events() const;
 
     void map_window(const xcb_window &) const;
 

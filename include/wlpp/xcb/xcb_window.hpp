@@ -40,6 +40,7 @@ private:
         xcb_change_property(server->get(), XCB_PROP_MODE_REPLACE, wind, property, XCB_ATOM_STRING, sizeof(T) * 8, std::char_traits<T>::length(str), str);
     }
 
+
     template<str_char T>
     void append_property(xcb_atom_enum_t property, const T *str) const
     {
@@ -70,6 +71,8 @@ public:
     void show() const override;
 
     void hide() const override;
+
+    bool has_closed() const override;
 };
 
 }
