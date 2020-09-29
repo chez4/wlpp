@@ -12,13 +12,14 @@
 
 #include <xcb/xcb.h>
 
-#include <wlpp/xcb/xcb_screen.hpp>
+#include <wlpp/connection.hpp>
 
 namespace wlpp {
 
+class xcb_screen;
 class xcb_window;
 
-class xcb_connection {
+class xcb_connection : connection {
 private:
     xcb_connection_t *conn;
     int screen_pref;
@@ -50,9 +51,13 @@ public:
 
     xcb_screen get_default_screen() const;
 
-    void poll_events() const;
+    void register_window() const override;
 
-    void wait_events() const;
+    void unregister_window() const override;
+
+    void poll_events() const override;
+
+    void wait_events() const override;
 
     void map_window(const xcb_window &) const;
 

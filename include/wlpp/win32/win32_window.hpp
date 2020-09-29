@@ -6,14 +6,14 @@
 #ifndef WLPP_WIN32_WINDOW_HPP
 #define WLPP_WIN32_WINDOW_HPP
 
-#include <wlpp/window.hpp>
-
 #include <string>
 
 #include <windef.h>
 #include <winuser.h>
 
 namespace wlpp {
+
+class window;
 
 class win32_window : public window {
 private:

@@ -15,9 +15,10 @@
 
 #include <wlpp/window.hpp>
 #include <wlpp/xcb/xcb_connection.hpp>
-#include <wlpp/xcb/xcb_screen.hpp>
 
 namespace wlpp {
+
+class xcb_screen;
 
 template<typename T>
 concept str_char = requires { std::same_as<T, char> || std::same_as<T, wchar_t> || std::same_as<T, char8_t> || std::same_as<T, char16_t> || std::same_as<T, char32_t>; };
