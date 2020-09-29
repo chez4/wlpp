@@ -11,9 +11,9 @@
 #include <windef.h>
 #include <winuser.h>
 
-namespace wlpp {
+#include <wlpp/window.hpp>
 
-class window;
+namespace wlpp {
 
 class win32_window : public window {
 private:

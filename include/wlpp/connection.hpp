@@ -14,13 +14,11 @@
 namespace wlpp {
 
 class connection {
-private:
-    std::vector<std::unique_ptr<window>> windows;
+protected:
+    std::vector<const window *> windows;
 
 public:
-    virtual void register_window() const = 0;
-
-    virtual void unregister_window() const = 0;
+    virtual ~connection() = default;
 
     virtual void poll_events() const = 0;
 

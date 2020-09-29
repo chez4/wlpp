@@ -10,6 +10,8 @@ namespace wlpp {
 
 class window {
 public:
+    virtual ~window() = default;
+
     virtual void poll_events() const = 0;
 
     virtual void wait_events() const = 0;
