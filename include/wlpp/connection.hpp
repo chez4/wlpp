@@ -20,6 +20,10 @@ protected:
 public:
     virtual ~connection() = default;
 
+    virtual void register_window(const window *) = 0;
+
+    virtual void unregister_window(const window *) = 0;
+
     virtual void poll_events() const = 0;
 
     virtual void wait_events() const = 0;

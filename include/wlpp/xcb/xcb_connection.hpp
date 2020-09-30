@@ -26,12 +26,14 @@ private:
 
     const xcb_setup_t *setup;
 
-    std::vector<const xcb_window *> windows;
+    const window *find_window(xcb_window_t) const;
+
+    void handle_event(const xcb_generic_event_t *) const;
 
 public:
     xcb_connection();
 
-    ~xcb_connection();
+    ~xcb_connection() override;
 
     xcb_connection(const xcb_connection &) = delete;
 
@@ -51,9 +53,9 @@ public:
 
     xcb_screen get_default_screen() const;
 
-    void register_window() const override;
+    void register_window(const window *) override;
 
-    void unregister_window() const override;
+    void unregister_window(const window *) override;
 
     void poll_events() const override;
 

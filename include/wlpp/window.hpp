@@ -12,15 +12,37 @@ class window {
 public:
     virtual ~window() = default;
 
-    virtual void poll_events() const = 0;
-
-    virtual void wait_events() const = 0;
-
     virtual void show() const = 0;
 
     virtual void hide() const = 0;
 
     virtual bool has_closed() const = 0;
+
+    virtual void key_press_event() const = 0;
+
+    virtual void key_release_event() const = 0;
+
+    virtual void button_press_event() const = 0;
+
+    virtual void button_release_event() const = 0;
+
+    virtual void motion_notify_event() const = 0;
+
+    virtual void enter_notify_event() const = 0;
+
+    virtual void leave_notify_event() const = 0;
+
+    virtual void focus_in_event() const = 0;
+
+    virtual void focus_out_event() const = 0;
+
+    virtual void expose_event() const = 0;
+
+    virtual void visibility_notify_event() const = 0;
+
+    virtual void create_notify_event() const = 0;
+
+    virtual void destroy_notify_event() const = 0;
 };
 
 }

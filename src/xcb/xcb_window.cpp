@@ -23,6 +23,8 @@ xcb_window::xcb_window(std::shared_ptr<xcb_connection> server, const xcb_screen 
 {
     wind = this->server->generate_id();
     xcb_create_window(this->server->get(), XCB_COPY_FROM_PARENT, wind, screen.get_parent_window(), x, y, width, height, border_width, XCB_WINDOW_CLASS_INPUT_OUTPUT, screen.get_parent_visual(), 0, nullptr);
+
+    this->server->register_window(this);
 }
 
 xcb_window::xcb_window(std::shared_ptr<xcb_connection> server, const xcb_screen &screen, std::uint16_t x, std::uint16_t y, std::uint16_t width, std::uint16_t height)
@@ -38,6 +40,8 @@ xcb_window::xcb_window(std::shared_ptr<xcb_connection> server, const xcb_screen 
 xcb_window::~xcb_window()
 {
     xcb_destroy_window(server->get(), wind);
+
+    server->unregister_window(this);
 }
 
 xcb_window::xcb_window(xcb_window &&other) noexcept
@@ -61,15 +65,6 @@ void swap(xcb_window &a, xcb_window &b)
 xcb_window_t xcb_window::get() const
 {
     return wind;
-}
-
-void xcb_window::poll_events() const
-{
-
-}
-
-void xcb_window::wait_events() const
-{
 }
 
 void xcb_window::show() const

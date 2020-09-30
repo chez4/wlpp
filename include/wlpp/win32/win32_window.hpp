@@ -31,7 +31,7 @@ private:
 public:
     explicit win32_window(const std::string &, int = CW_USEDEFAULT, int = CW_USEDEFAULT, int = CW_USEDEFAULT, int = CW_USEDEFAULT);
 
-    ~win32_window();
+    ~win32_window() override;
 
     win32_window(const win32_window &) = delete;
 

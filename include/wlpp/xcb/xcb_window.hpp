@@ -53,7 +53,7 @@ public:
     xcb_window(std::shared_ptr<xcb_connection>, const xcb_screen &, std::uint16_t, std::uint16_t, std::uint16_t, std::uint16_t);
     xcb_window(std::shared_ptr<xcb_connection>, const xcb_screen &, std::uint16_t, std::uint16_t);
 
-    ~xcb_window();
+    ~xcb_window() override;
 
     xcb_window(const xcb_window &) = delete;
 
@@ -65,15 +65,33 @@ public:
 
     xcb_window_t get() const;
 
-    void poll_events() const override;
-
-    void wait_events() const override;
-
     void show() const override;
 
     void hide() const override;
 
     bool has_closed() const override;
+
+    void key_press_event() const override;
+
+    void key_release_event() const override;
+
+    void button_press_event() const override;
+
+    void button_release_event() const override;
+
+    void enter_notify_event() const override;
+
+    void focus_in_event() const override;
+
+    void focus_out_event() const override;
+
+    void expose_event() const override;
+
+    void visibility_notify_event() const override;
+
+    void create_notify_event() const override;
+
+    void destroy_notify_event() const override;
 };
 
 }
