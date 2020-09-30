@@ -43,6 +43,32 @@ public:
     virtual void create_notify_event() const = 0;
 
     virtual void destroy_notify_event() const = 0;
+
+    virtual void unmap_notify_event() const = 0;
+
+    virtual void map_notify_event() const = 0;
+
+    virtual void map_request_event() const = 0;
+
+    virtual void reparent_notify_event() const = 0;
+
+    virtual void configure_notify_event() const = 0;
+
+    virtual void configure_request_event() const = 0;
+
+    virtual void gravity_notify_event() const = 0;
+
+    virtual void resize_request_event() const = 0;
+
+    virtual void circulate_notify_event() const = 0;
+
+    virtual void circulate_request_event() const = 0;
+
+    virtual void property_notify_event() const = 0;
+
+    virtual void selection_clear_event() const = 0;
+
+
 };
 
 }

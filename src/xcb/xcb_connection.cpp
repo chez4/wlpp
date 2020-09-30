@@ -122,6 +122,83 @@ void xcb_connection::handle_event(const xcb_generic_event_t *event) const
                 find_window(real_event->window)->destroy_notify_event();
                 break;
             }
+
+            case XCB_UNMAP_NOTIFY: {
+                auto *real_event = (xcb_unmap_notify_event_t *) event;
+                find_window(real_event->window)->unmap_notify_event();
+                break;
+            }
+
+            case XCB_MAP_NOTIFY: {
+                auto *real_event = (xcb_map_notify_event_t *) event;
+                find_window(real_event->window)->map_notify_event();
+                break;
+            }
+
+            case XCB_MAP_REQUEST: {
+                auto *real_event = (xcb_map_request_event_t *) event;
+                find_window(real_event->window)->map_request_event();
+                break;
+            }
+
+            case XCB_REPARENT_NOTIFY: {
+                auto *real_event = (xcb_reparent_notify_event_t *) event;
+                find_window(real_event->window)->reparent_notify_event();
+                break;
+            }
+
+            case XCB_CONFIGURE_NOTIFY: {
+                auto *real_event = (xcb_configure_notify_event_t *) event;
+                find_window(real_event->window)->configure_notify_event();
+                break;
+            }
+
+            case XCB_CONFIGURE_REQUEST: {
+                auto *real_event = (xcb_configure_request_event_t *) event;
+                find_window(real_event->window)->configure_request_event();
+                break;
+            }
+
+            case XCB_GRAVITY_NOTIFY: {
+                auto *real_event = (xcb_gravity_notify_event_t *) event;
+                find_window(real_event->window)->gravity_notify_event();
+                break;
+            }
+
+            case XCB_RESIZE_REQUEST: {
+                auto *real_event = (xcb_resize_request_event_t *) event;
+                find_window(real_event->window)->resize_request_event();
+                break;
+            }
+
+            case XCB_CIRCULATE_NOTIFY: {
+                auto *real_event = (xcb_circulate_notify_event_t *) event;
+                find_window(real_event->window)->circulate_notify_event();
+                break;
+            }
+
+            case XCB_CIRCULATE_REQUEST: {
+                auto *real_event = (xcb_circulate_request_event_t *) event;
+                find_window(real_event->window)->circulate_request_event();
+                break;
+            }
+
+            case XCB_PROPERTY_NOTIFY: {
+                auto *real_event = (xcb_property_notify_event_t *) event;
+                find_window(real_event->window)->property_notify_event();
+                break;
+            }
+
+            case XCB_SELECTION_CLEAR: {
+                auto *real_event = (xcb_selection_clear_event_t *) event;
+                find_window(real_event->owner)->selection_clear_event();
+                break;
+            }
+
+            case XCB_SELECTION_REQUEST: {
+                auto *real_event = (xcb_selection_request_event_t *) event;
+                find_window(real_event->requestor)
+            }
         }
     }
 }

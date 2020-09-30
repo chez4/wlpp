@@ -70,28 +70,6 @@ public:
     void hide() const override;
 
     bool has_closed() const override;
-
-    void key_press_event() const override;
-
-    void key_release_event() const override;
-
-    void button_press_event() const override;
-
-    void button_release_event() const override;
-
-    void enter_notify_event() const override;
-
-    void focus_in_event() const override;
-
-    void focus_out_event() const override;
-
-    void expose_event() const override;
-
-    void visibility_notify_event() const override;
-
-    void create_notify_event() const override;
-
-    void destroy_notify_event() const override;
 };
 
 }
