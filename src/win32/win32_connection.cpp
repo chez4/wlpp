@@ -3,7 +3,7 @@
  * See LICENSE for more information.
  */
 
-#include <wlpp/win32/win_32_connection.hpp>
+#include <wlpp/win32/win32_connection.hpp>
 
 #include <winuser.h>
 

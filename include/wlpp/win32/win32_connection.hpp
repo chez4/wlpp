@@ -3,8 +3,8 @@
  * See LICENSE for more information.
  */
 
-#ifndef WLPP_WIN_32_CONNECTION_HPP
-#define WLPP_WIN_32_CONNECTION_HPP
+#ifndef WLPP_WIN32_CONNECTION_HPP
+#define WLPP_WIN32_CONNECTION_HPP
 
 #include <windef.h>
 
@@ -26,4 +26,4 @@ public:
 
 }
 
-#endif //WLPP_WIN_32_CONNECTION_HPP
+#endif //WLPP_WIN32_CONNECTION_HPP
