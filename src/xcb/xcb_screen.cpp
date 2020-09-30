@@ -24,4 +24,14 @@ xcb_visualid_t xcb_screen::get_parent_visual() const
     return screen.root_visual;
 }
 
+std::uint32_t xcb_screen::get_white_pixel() const
+{
+    return screen.white_pixel;
+}
+
+std::uint32_t xcb_screen::get_black_pixel() const
+{
+    return screen.black_pixel;
+}
+
 }

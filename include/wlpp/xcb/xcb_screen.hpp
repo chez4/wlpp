@@ -6,6 +6,8 @@
 #ifndef WLPP_XCB_SCREEN_HPP
 #define WLPP_XCB_SCREEN_HPP
 
+#include <cstdint>
+
 #include <xcb/xcb.h>
 
 namespace wlpp {
@@ -20,6 +22,10 @@ public:
     xcb_window_t get_parent_window() const;
 
     xcb_visualid_t get_parent_visual() const;
+
+    std::uint32_t get_white_pixel() const;
+
+    std::uint32_t get_black_pixel() const;
 };
 
 }
