@@ -29,8 +29,6 @@ private:
 
     std::shared_ptr<xcb_connection> server;
 
-    bool quit;
-
     template<str_char T>
     void prepend_property(xcb_atom_enum_t property, const T *str) const
     {

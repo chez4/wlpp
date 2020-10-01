@@ -20,7 +20,6 @@ namespace wlpp {
 xcb_window::xcb_window(std::shared_ptr<xcb_connection> server, const xcb_screen &screen, std::uint16_t x, std::uint16_t y, std::uint16_t width, std::uint16_t height, std::uint16_t border_width)
     : wind()
     , server(std::move(server))
-    , quit(false)
 {
     wind = this->server->generate_id();
 
@@ -57,7 +56,6 @@ xcb_window::~xcb_window()
 xcb_window::xcb_window(xcb_window &&other) noexcept
     : wind(other.wind)
     , server(std::move(other.server))
-    , quit(other.quit)
 {
 }
 

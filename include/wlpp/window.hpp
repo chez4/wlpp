@@ -11,7 +11,12 @@
 namespace wlpp {
 
 class window {
+protected:
+    bool quit;
+
 public:
+    window();
+
     virtual ~window() = default;
 
     virtual void show() const = 0;

@@ -22,7 +22,6 @@ private:
 
     HINSTANCE inst;
 
-    bool quit;
     mutable bool shown;
 
     static LRESULT CALLBACK window_callback(HWND, UINT, WPARAM, LPARAM);
