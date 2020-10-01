@@ -72,25 +72,25 @@ public:
 
     bool has_closed() const override;
 
-    void key_press_event(std::uint8_t) override;
+    void key_press_event(std::uint8_t, std::uint16_t, std::uint16_t) override;
 
-    void key_release_event(std::uint8_t) override;
+    void key_release_event(std::uint8_t, std::uint16_t, std::uint16_t) override;
 
-    void button_press_event(std::uint8_t) override;
+    void button_press_event(std::uint8_t, std::uint16_t, std::uint16_t) override;
 
-    void button_release_event(std::uint8_t) override;
+    void button_release_event(std::uint8_t, std::uint16_t, std::uint16_t) override;
 
-    void motion_notify_event(std::uint8_t) override;
+    void motion_notify_event(std::uint8_t, std::uint16_t, std::uint16_t) override;
 
-    void enter_notify_event() override;
+    void enter_notify_event(std::uint16_t, std::uint16_t) override;
 
-    void leave_notify_event() override;
+    void leave_notify_event(std::uint16_t, std::uint16_t) override;
 
     void focus_in_event() override;
 
     void focus_out_event() override;
 
-    void expose_event(std::uint16_t, std::uint16_t, std::uint16_t, std::uint16_t) override;
+    void expose_event(std::uint16_t, std::uint16_t, std::uint16_t, std::uint16_t, std::uint16_t) override;
 
     void visibility_notify_event() override;
 
@@ -102,23 +102,11 @@ public:
 
     void map_notify_event() override;
 
-    void map_request_event() override;
-
-    void reparent_notify_event() override;
+    void reparent_notify_event(std::uint16_t, std::uint16_t) override;
 
     void configure_notify_event(std::uint16_t, std::uint16_t, std::uint16_t, std::uint16_t) override;
 
-    void configure_request_event() override;
-
-    void gravity_notify_event() override;
-
     void resize_request_event(std::uint16_t, std::uint16_t) override;
-
-    void circulate_notify_event() override;
-
-    void circulate_request_event() override;
-
-    void property_notify_event() override;
 
     void selection_clear_event() override;
 

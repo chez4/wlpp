@@ -24,7 +24,14 @@ xcb_window::xcb_window(std::shared_ptr<xcb_connection> server, const xcb_screen 
 {
     wind = this->server->generate_id();
 
-    std::uint32_t mask[2] = { screen.get_black_pixel(), XCB_EVENT_MASK_EXPOSURE }; // Change
+    std::uint32_t mask[2] = { screen.get_black_pixel(), XCB_EVENT_MASK_KEY_PRESS | XCB_EVENT_MASK_KEY_RELEASE |
+                                                        XCB_EVENT_MASK_BUTTON_PRESS | XCB_EVENT_MASK_BUTTON_RELEASE |
+                                                        XCB_EVENT_MASK_ENTER_WINDOW | XCB_EVENT_MASK_LEAVE_WINDOW |
+                                                        XCB_EVENT_MASK_POINTER_MOTION | XCB_EVENT_MASK_EXPOSURE |
+                                                        XCB_EVENT_MASK_VISIBILITY_CHANGE | XCB_EVENT_MASK_STRUCTURE_NOTIFY |
+                                                        XCB_EVENT_MASK_RESIZE_REDIRECT | XCB_EVENT_MASK_FOCUS_CHANGE |
+                                                        XCB_EVENT_MASK_PROPERTY_CHANGE | XCB_EVENT_MASK_COLOR_MAP_CHANGE |
+                                                        XCB_EVENT_MASK_OWNER_GRAB_BUTTON };
     xcb_create_window(this->server->get(), XCB_COPY_FROM_PARENT, wind, screen.get_parent_window(), x, y, width, height, border_width, XCB_WINDOW_CLASS_INPUT_OUTPUT, screen.get_parent_visual(), XCB_CW_BACK_PIXEL | XCB_CW_EVENT_MASK, mask);
 
     this->server->register_window(this);
@@ -87,31 +94,31 @@ bool xcb_window::has_closed() const
     return quit;
 }
 
-void xcb_window::key_press_event(std::uint8_t)
+void xcb_window::key_press_event(std::uint8_t, std::uint16_t, std::uint16_t)
 {
 }
 
-void xcb_window::key_release_event(std::uint8_t)
+void xcb_window::key_release_event(std::uint8_t, std::uint16_t, std::uint16_t)
 {
 }
 
-void xcb_window::button_press_event(std::uint8_t)
+void xcb_window::button_press_event(std::uint8_t, std::uint16_t, std::uint16_t)
 {
 }
 
-void xcb_window::button_release_event(std::uint8_t)
+void xcb_window::button_release_event(std::uint8_t, std::uint16_t, std::uint16_t)
 {
 }
 
-void xcb_window::motion_notify_event(std::uint8_t)
+void xcb_window::motion_notify_event(std::uint8_t, std::uint16_t, std::uint16_t)
 {
 }
 
-void xcb_window::enter_notify_event()
+void xcb_window::enter_notify_event(std::uint16_t, std::uint16_t)
 {
 }
 
-void xcb_window::leave_notify_event()
+void xcb_window::leave_notify_event(std::uint16_t, std::uint16_t)
 {
 }
 
@@ -123,7 +130,7 @@ void xcb_window::focus_out_event()
 {
 }
 
-void xcb_window::expose_event(std::uint16_t, std::uint16_t, std::uint16_t, std::uint16_t)
+void xcb_window::expose_event(std::uint16_t, std::uint16_t, std::uint16_t, std::uint16_t, std::uint16_t)
 {
 }
 
@@ -148,11 +155,7 @@ void xcb_window::map_notify_event()
 {
 }
 
-void xcb_window::map_request_event()
-{
-}
-
-void xcb_window::reparent_notify_event()
+void xcb_window::reparent_notify_event(std::uint16_t, std::uint16_t)
 {
 }
 
@@ -160,27 +163,7 @@ void xcb_window::configure_notify_event(std::uint16_t, std::uint16_t, std::uint1
 {
 }
 
-void xcb_window::configure_request_event()
-{
-}
-
-void xcb_window::gravity_notify_event()
-{
-}
-
 void xcb_window::resize_request_event(std::uint16_t, std::uint16_t)
-{
-}
-
-void xcb_window::circulate_notify_event()
-{
-}
-
-void xcb_window::circulate_request_event()
-{
-}
-
-void xcb_window::property_notify_event()
 {
 }
 

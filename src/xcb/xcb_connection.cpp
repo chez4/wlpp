@@ -27,6 +27,18 @@ window *xcb_connection::find_window(xcb_window_t key) const
     return nullptr;
 }
 
+/*
+ * Does not handle:
+ *   XCB_KEYMAP_NOTIFY
+ *   XCB_GRAPHICS_EXPOSURE
+ *   XCB_NO_EXPOSURE
+ *   XCB_MAP_REQUEST
+ *   XCB_CONFIGURE_REQUEST
+ *   XCB_GRAVITY_NOTIFY
+ *   XCB_CIRCULATE_NOTIFY
+ *   XCB_CIRCULATE_REQUEST
+ *   XCB_MAPPING_NOTIFY
+ */
 void xcb_connection::handle_event(const xcb_generic_event_t *event) const
 {
     if (event != nullptr) {
@@ -34,49 +46,49 @@ void xcb_connection::handle_event(const xcb_generic_event_t *event) const
             case XCB_KEY_PRESS: {
                 std::cout << "key press" << std::endl;
                 auto *real_event = (xcb_key_press_event_t *) event;
-                find_window(real_event->event)->key_press_event(real_event->detail);
+                find_window(real_event->event)->key_press_event(real_event->detail, real_event->event_x, real_event->event_y);
                 break;
             }
 
             case XCB_KEY_RELEASE: {
                 std::cout << "key release" << std::endl;
                 auto *real_event = (xcb_key_release_event_t *) event;
-                find_window(real_event->event)->key_release_event(real_event->detail);
+                find_window(real_event->event)->key_release_event(real_event->detail, real_event->event_x, real_event->event_y);
                 break;
             }
 
             case XCB_BUTTON_PRESS: {
                 std::cout << "button press" << std::endl;
                 auto *real_event = (xcb_button_press_event_t *) event;
-                find_window(real_event->event)->button_press_event(real_event->detail);
+                find_window(real_event->event)->button_press_event(real_event->detail, real_event->event_x, real_event->event_y);
                 break;
             }
 
             case XCB_BUTTON_RELEASE: {
                 std::cout << "button release" << std::endl;
                 auto *real_event = (xcb_button_release_event_t *) event;
-                find_window(real_event->event)->button_release_event(real_event->detail);
+                find_window(real_event->event)->button_release_event(real_event->detail, real_event->event_x, real_event->event_y);
                 break;
             }
 
             case XCB_MOTION_NOTIFY: {
                 std::cout << "motion notify" << std::endl;
                 auto *real_event = (xcb_motion_notify_event_t *) event;
-                find_window(real_event->event)->motion_notify_event(real_event->detail);
+                find_window(real_event->event)->motion_notify_event(real_event->detail, real_event->event_x, real_event->event_y);
                 break;
             }
 
             case XCB_ENTER_NOTIFY: {
                 std::cout << "enter notify" << std::endl;
                 auto *real_event = (xcb_enter_notify_event_t *) event;
-                find_window(real_event->event)->enter_notify_event();
+                find_window(real_event->event)->enter_notify_event(real_event->event_x, real_event->event_y);
                 break;
             }
 
             case XCB_LEAVE_NOTIFY: {
                 std::cout << "leave notify" << std::endl;
                 auto *real_event = (xcb_leave_notify_event_t *) event;
-                find_window(real_event->event)->leave_notify_event();
+                find_window(real_event->event)->leave_notify_event(real_event->event_x, real_event->event_y);
                 break;
             }
 
@@ -94,28 +106,10 @@ void xcb_connection::handle_event(const xcb_generic_event_t *event) const
                 break;
             }
 
-            case XCB_KEYMAP_NOTIFY: {
-                std::cout << "keymap notify" << std::endl;
-                auto *real_event = (xcb_keymap_notify_event_t *) event;
-                break;
-            }
-
             case XCB_EXPOSE: {
                 std::cout << "expose" << std::endl;
                 auto *real_event = (xcb_expose_event_t *) event;
-                find_window(real_event->window)->expose_event(real_event->x, real_event->y, real_event->width, real_event->height);
-                break;
-            }
-
-            case XCB_GRAPHICS_EXPOSURE: {
-                std::cout << "key press" << std::endl;
-                auto *real_event = (xcb_graphics_exposure_event_t *) event;
-                break;
-            }
-
-            case XCB_NO_EXPOSURE: {
-                std::cout << "no exposure" << std::endl;
-                auto *real_event = (xcb_no_exposure_event_t *) event;
+                find_window(real_event->window)->expose_event(real_event->x, real_event->y, real_event->width, real_event->height, real_event->count);
                 break;
             }
 
@@ -154,38 +148,17 @@ void xcb_connection::handle_event(const xcb_generic_event_t *event) const
                 break;
             }
 
-            case XCB_MAP_REQUEST: {
-                std::cout << "map request" << std::endl;
-                auto *real_event = (xcb_map_request_event_t *) event;
-                find_window(real_event->window)->map_request_event();
-                break;
-            }
-
             case XCB_REPARENT_NOTIFY: {
                 std::cout << "reparent notify" << std::endl;
                 auto *real_event = (xcb_reparent_notify_event_t *) event;
-                find_window(real_event->window)->reparent_notify_event();
+                find_window(real_event->window)->reparent_notify_event(real_event->x, real_event->y);
                 break;
             }
 
-            case XCB_CONFIGURE_NOTIFY: {
+            case XCB_CONFIGURE_NOTIFY: { // Probably redundant
                 std::cout << "configure notify" << std::endl;
                 auto *real_event = (xcb_configure_notify_event_t *) event;
                 find_window(real_event->window)->configure_notify_event(real_event->x, real_event->y, real_event->width, real_event->height);
-                break;
-            }
-
-            case XCB_CONFIGURE_REQUEST: {
-                std::cout << "configure request" << std::endl;
-                auto *real_event = (xcb_configure_request_event_t *) event;
-                find_window(real_event->window)->configure_request_event();
-                break;
-            }
-
-            case XCB_GRAVITY_NOTIFY: {
-                std::cout << "gravity notify" << std::endl;
-                auto *real_event = (xcb_gravity_notify_event_t *) event;
-                find_window(real_event->window)->gravity_notify_event();
                 break;
             }
 
@@ -196,49 +169,28 @@ void xcb_connection::handle_event(const xcb_generic_event_t *event) const
                 break;
             }
 
-            case XCB_CIRCULATE_NOTIFY: {
-                std::cout << "circulate notify" << std::endl;
-                auto *real_event = (xcb_circulate_notify_event_t *) event;
-                find_window(real_event->window)->circulate_notify_event();
-                break;
-            }
-
-            case XCB_CIRCULATE_REQUEST: {
-                std::cout << "circulate request" << std::endl;
-                auto *real_event = (xcb_circulate_request_event_t *) event;
-                find_window(real_event->window)->circulate_request_event();
-                break;
-            }
-
-            case XCB_PROPERTY_NOTIFY: {
-                std::cout << "property notify" << std::endl;
-                auto *real_event = (xcb_property_notify_event_t *) event;
-                find_window(real_event->window)->property_notify_event();
-                break;
-            }
-
-            case XCB_SELECTION_CLEAR: {
+            case XCB_SELECTION_CLEAR: { // Unknown
                 std::cout << "selection clear" << std::endl;
                 auto *real_event = (xcb_selection_clear_event_t *) event;
                 find_window(real_event->owner)->selection_clear_event();
                 break;
             }
 
-            case XCB_SELECTION_REQUEST: {
+            case XCB_SELECTION_REQUEST: { // Unknown
                 std::cout << "selection request" << std::endl;
                 auto *real_event = (xcb_selection_request_event_t *) event;
                 find_window(real_event->requestor)->selection_request_event();
                 break;
             }
 
-            case XCB_SELECTION_NOTIFY: {
+            case XCB_SELECTION_NOTIFY: { // Unknown
                 std::cout << "selection notify" << std::endl;
                 auto *real_event = (xcb_selection_notify_event_t *) event;
                 find_window(real_event->requestor)->selection_notify_event();
                 break;
             }
 
-            case XCB_COLORMAP_NOTIFY: {
+            case XCB_COLORMAP_NOTIFY: { // Unknown
                 std::cout << "colormap notify" << std::endl;
                 auto *real_event = (xcb_colormap_notify_event_t *) event;
                 find_window(real_event->window)->colormap_notify_event();
@@ -249,12 +201,6 @@ void xcb_connection::handle_event(const xcb_generic_event_t *event) const
                 std::cout << "client message" << std::endl;
                 auto *real_event = (xcb_client_message_event_t *) event;
                 find_window(real_event->window)->client_message_event();
-                break;
-            }
-
-            case XCB_MAPPING_NOTIFY: {
-                std::cout << "mapping notify" << std::endl;
-                auto *real_event = (xcb_mapping_notify_event_t *) event;
                 break;
             }
 
