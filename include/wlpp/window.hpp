@@ -25,6 +25,8 @@ public:
 
     virtual bool has_closed() const = 0;
 
+    // TODO: Documentation
+
     virtual void key_press_event(std::uint8_t, std::uint16_t, std::uint16_t) = 0;
 
     virtual void key_release_event(std::uint8_t, std::uint16_t, std::uint16_t) = 0;
