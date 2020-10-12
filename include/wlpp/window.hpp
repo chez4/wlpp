@@ -6,6 +6,8 @@
 #ifndef WLPP_WINDOW_HPP
 #define WLPP_WINDOW_HPP
 
+#include <string>
+
 #include <cstdint>
 
 namespace wlpp {
@@ -18,6 +20,8 @@ public:
     window();
 
     virtual ~window() = default;
+
+    virtual void set_title(const std::string &) const = 0;
 
     virtual void show() const = 0;
 

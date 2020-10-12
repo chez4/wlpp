@@ -6,6 +6,7 @@
 #include <wlpp/xcb/xcb_window.hpp>
 
 #include <memory>
+#include <string>
 #include <utility>
 
 #include <cstdint>
@@ -14,10 +15,11 @@
 
 #include <wlpp/xcb/xcb_connection.hpp>
 #include <wlpp/xcb/xcb_screen.hpp>
+#include <iostream>
 
 namespace wlpp {
 
-xcb_window::xcb_window(std::shared_ptr<xcb_connection> server, const xcb_screen &screen, std::uint16_t x, std::uint16_t y, std::uint16_t width, std::uint16_t height, std::uint16_t border_width)
+xcb_window::xcb_window(std::shared_ptr<xcb_connection> server, const xcb_screen &screen, std::uint16_t x, std::uint16_t y, std::uint16_t width, std::uint16_t height, std::uint16_t border_width, const std::string &title)
     : wind()
     , server(std::move(server))
 {
@@ -32,16 +34,17 @@ xcb_window::xcb_window(std::shared_ptr<xcb_connection> server, const xcb_screen 
                                                         XCB_EVENT_MASK_PROPERTY_CHANGE | XCB_EVENT_MASK_COLOR_MAP_CHANGE |
                                                         XCB_EVENT_MASK_OWNER_GRAB_BUTTON };
     xcb_create_window(this->server->get(), XCB_COPY_FROM_PARENT, wind, screen.get_parent_window(), x, y, width, height, border_width, XCB_WINDOW_CLASS_INPUT_OUTPUT, screen.get_parent_visual(), XCB_CW_BACK_PIXEL | XCB_CW_EVENT_MASK, mask);
+    this->set_title(title);
 
     this->server->register_window(this);
 }
 
-xcb_window::xcb_window(std::shared_ptr<xcb_connection> server, const xcb_screen &screen, std::uint16_t x, std::uint16_t y, std::uint16_t width, std::uint16_t height)
+xcb_window::xcb_window(std::shared_ptr<xcb_connection> server, const xcb_screen &screen, std::uint16_t x, std::uint16_t y, std::uint16_t width, std::uint16_t height, const std::string &)
     : xcb_window(std::move(server), screen, x, y, width, height, 0)
 {
 }
 
-xcb_window::xcb_window(std::shared_ptr<xcb_connection> server, const xcb_screen &screen, std::uint16_t width, std::uint16_t height)
+xcb_window::xcb_window(std::shared_ptr<xcb_connection> server, const xcb_screen &screen, std::uint16_t width, std::uint16_t height, const std::string &)
     : xcb_window(std::move(server), screen, 0, 0, width, height, 0)
 {
 }
@@ -75,6 +78,11 @@ void swap(xcb_window &a, xcb_window &b)
 xcb_window_t xcb_window::get() const
 {
     return wind;
+}
+
+void xcb_window::set_title(const std::string &title) const
+{
+    xcb_change_property(server->get(), XCB_PROP_MODE_REPLACE, wind, XCB_ATOM_WM_NAME, XCB_ATOM_STRING, 8, title.length(), title.c_str());
 }
 
 void xcb_window::show() const
@@ -161,8 +169,15 @@ void xcb_window::configure_notify_event(std::uint16_t, std::uint16_t, std::uint1
 {
 }
 
-void xcb_window::resize_request_event(std::uint16_t, std::uint16_t)
+void xcb_window::resize_request_event(std::uint16_t w, std::uint16_t h)
 {
+    xcb_get_geometry_cookie_t geom = xcb_get_geometry(server->get(), wind);
+    xcb_get_geometry_reply_t *reply;
+    if ((reply = xcb_get_geometry_reply(server->get(), geom, nullptr))) {
+        std::cout << reply->width << " " << reply->height << std::endl;
+        std::cout << w << " " << h << std::endl;
+    }
+    delete reply;
 }
 
 void xcb_window::selection_clear_event()
