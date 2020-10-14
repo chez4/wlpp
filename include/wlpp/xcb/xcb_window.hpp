@@ -43,7 +43,7 @@ public:
 
     xcb_window_t get() const;
 
-    void set_title(const std::string &) const;
+    void set_title(const std::string &) const override;
 
     void show() const override;
 
