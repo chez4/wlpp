@@ -28,7 +28,7 @@ endif()
 set_target_properties(wlpp PROPERTIES
         CXX_STANDARD 20
         CXX_EXTENSIONS OFF
-        OUTPUT_NAME ${WLPP_LIB_NAME}
+        OUTPUT_NAME ${wlpp_LIB_NAME}
         VERSION ${wlpp_VERSION_MAJOR}.${wlpp_VERSION_MINOR}
         SOVERSION ${wlpp_VERSION_MAJOR})
 

@@ -7,11 +7,20 @@ project(wlpp VERSION 0.0.1 LANGUAGES CXX)
 
 # Options ----------------------------------------------------------------------
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
-option(WLPP_INSTALL "Generate installation target" ON)
+option(wlpp_BUILD_DOCS "Build Doxygen documentation" ON)
+option(wlpp_INSTALL "Generate installation target" ON)
 
-set(WLPP_LIB_NAME wlpp)
+set(wlpp_LIB_NAME wlpp)
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
+if (wlpp_BUILD_DOCS)
+#    set(DOXYGEN_SKIP_DOT TRUE)
+    find_package(Doxygen)
+    if (NOT DOXYGEN_FOUND)
+        message(FATAL_ERROR "Doxygen was not found")
+    endif()
+endif()
 
 # Select API -------------------------------------------------------------------
 list(APPEND CMAKE_MODULE_PATH "${wlpp_SOURCE_DIR}/CMake")
@@ -36,28 +45,37 @@ endif()
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 
-set(WLPP_CONFIG_PATH "${CMAKE_INSTALL_LIBDIR}/cmake/wlpp")
+set(wlpp_CONFIG_PATH "${CMAKE_INSTALL_LIBDIR}/cmake/wlpp")
 
 configure_package_config_file(CMake/wlppConfig.cmake.in
         src/wlppConfig.cmake
-        INSTALL_DESTINATION "${WLPP_CONFIG_PATH}"
+        INSTALL_DESTINATION "${wlpp_CONFIG_PATH}"
         NO_CHECK_REQUIRED_COMPONENTS_MACRO)
 
 write_basic_package_version_file(src/wlppConfigVersion.cmake
         VERSION ${wlpp_VERSION}
         COMPATIBILITY SameMajorVersion)
 
-# Add subdirectory -------------------------------------------------------------
+# Add subdirectories -----------------------------------------------------------
 add_subdirectory(src)
 
+if(wlpp_BUILD_DOCS)
+    add_subdirectory(docs)
+endif()
+
 # Install package and headers --------------------------------------------------
-if(WLPP_INSTALL)
+if(wlpp_INSTALL)
     install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
     install(FILES "${CMAKE_BINARY_DIR}/src/wlppConfig.cmake"
             "${CMAKE_BINARY_DIR}/src/wlppConfigVersion.cmake"
-            DESTINATION "${WLPP_CONFIG_PATH}")
+            DESTINATION "${wlpp_CONFIG_PATH}")
     install(EXPORT wlppTargets FILE wlppTargets.cmake
             EXPORT_LINK_INTERFACE_LIBRARIES
             NAMESPACE wlpp::
-            DESTINATION ${WLPP_CONFIG_PATH})
+            DESTINATION ${wlpp_CONFIG_PATH})
+
+    if(wlpp_BUILD_DOCS)
+        install(DIRECTORY "${wlpp_BINARY_DIR}/docs/html"
+                DESTINATION ${CMAKE_INSTALL_DOCDIR})
+    endif()
 endif()
