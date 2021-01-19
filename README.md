@@ -1,9 +1,11 @@
 # wlpp
 
-WindowLibrary++ is a cross-platform modern C++ library, used for the creation and handling of window objects.
+_window library plus plus_ is a cross-platform modern C++ library, providing the creation and management of window objects.
 
 ---
 
-_Copyright 2020 Max Burns_
+## License
+
+_Copyright (C) 2020-2021 Max Burns_
 
 _wlpp is licensed under MIT license, see LICENSE for more information_
