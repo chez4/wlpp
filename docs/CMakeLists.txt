@@ -1,5 +1,7 @@
-# wlpp Copyright 2020 Max Burns
-# See LICENSE for more information.
+# Copyright (C) 2020-2021 Max Burns
+# See LICENSE for more information
+# wlpp   - docs/CMakeLists.txt
+# Author - chez4 14/10/2020
 
 # Configure Doxyfile -----------------------------------------------------------
 set(wlpp_DOXYGEN_INPUT "${wlpp_SOURCE_DIR}/include/wlpp")

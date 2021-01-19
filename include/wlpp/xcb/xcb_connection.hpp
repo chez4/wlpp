@@ -1,14 +1,10 @@
-/*
- * wlpp Copyright 2020 Max Burns
- * See LICENSE for more information.
- */
+// Copyright (C) 2020-2021 Max Burns
+// See LICENSE for more information
+// wlpp   - include/wlpp/xcb/xcb_connection.hpp
+// Author - chez4 20/09/2020
 
 #ifndef WLPP_XCB_CONNECTION_HPP
 #define WLPP_XCB_CONNECTION_HPP
-
-#include <vector>
-
-#include <cstdint>
 
 #include <xcb/xcb.h>
 
@@ -16,56 +12,72 @@
 
 namespace wlpp {
 
-class xcb_screen;
-class xcb_window;
-
-class xcb_connection : connection {
+/**
+ * Connection to X11 display server through XCB.
+ *
+ * Provides an interface to the X11 display server, along with management of
+ * windows and event handling.
+ *
+ * @warning This class and header should only be used on a platform using X11.
+ *
+ * @see connection
+ */
+class xcb_connection : public connection<xcb_connection> {
 private:
     xcb_connection_t *conn;
-    int screen_pref;
-
-    const xcb_setup_t *setup;
-
-    window *find_window(xcb_window_t) const;
-
-    void handle_event(const xcb_generic_event_t *) const;
 
 public:
+    /**
+     * Constructs connection.
+     *
+     * @exceptsafe Will not throw exceptions.
+     */
     xcb_connection();
 
-    ~xcb_connection() override;
+    /**
+     * Destructs connection.
+     *
+     * @exceptsafe Will not throw exceptions.
+     */
+    ~xcb_connection();
 
     xcb_connection(const xcb_connection &) = delete;
 
-    xcb_connection(xcb_connection &&) noexcept;
+    /**
+     * Constructs connection from move.
+     *
+     * @param[in, out] other Connection to move from.
+     *
+     * @exceptsafe Will not throw exceptions.
+     */
+    xcb_connection(xcb_connection &&other) noexcept;
 
-    xcb_connection &operator=(xcb_connection);
+    /**
+     * Assigns connection to other connection.
+     *
+     * @param[in, out] other Connection to assign to.
+     *
+     * @returns Reference to this newly assigned connection.
+     *
+     * @exceptsafe Will not throw exceptions.
+     */
+    xcb_connection &operator=(xcb_connection other);
 
-    friend void swap(xcb_connection &, xcb_connection &);
+    /**
+     * Swaps two xcb_connections.
+     *
+     * @param[in, out] a Swap operand.
+     * @param[in, out] b Swap operand.
+     *
+     * @exceptsafe Will not throw exceptions.
+     *
+     * @relatesalso xcb_connection
+     */
+    friend void swap(xcb_connection &a, xcb_connection &b);
 
-    xcb_connection_t *get() const;
-
-    void flush() const;
-
-    std::uint32_t generate_id() const;
-
-    xcb_screen get_screen(int) const;
-
-    xcb_screen get_default_screen() const;
-
-    void register_window(window *) override;
-
-    void unregister_window(window *) override;
-
-    void poll_events() const override;
-
-    void wait_events() const override;
-
-    void map_window(const xcb_window &) const;
-
-    void unmap_window(const xcb_window &) const;
+    void send() const;
 };
 
 }
 
-#endif //WLPP_XCB_CONNECTION_HPP
+#endif // WLPP_XCB_CONNECTION_HPP

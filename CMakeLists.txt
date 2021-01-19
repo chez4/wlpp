@@ -1,21 +1,22 @@
-# wlpp Copyright 2020 Max Burns
-# See LICENSE for more information.
+# Copyright (C) 2020-2021 Max Burns
+# See LICENSE for more information
+# wlpp   - CMakeLists.txt
+# Author - chez4 18/09/2020
 
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.14)
 
-project(wlpp VERSION 0.0.1 LANGUAGES CXX)
+project(wlpp VERSION 0.1.0 LANGUAGES CXX)
 
 # Options ----------------------------------------------------------------------
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 option(wlpp_BUILD_DOCS "Build Doxygen documentation" ON)
+option(wlpp_BUILD_TESTS "Build unit tests" ON)
 option(wlpp_INSTALL "Generate installation target" ON)
 
 set(wlpp_LIB_NAME wlpp)
 
-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
-
 if (wlpp_BUILD_DOCS)
-#    set(DOXYGEN_SKIP_DOT TRUE)
+    set(DOXYGEN_SKIP_DOT TRUE)
     find_package(Doxygen)
     if (NOT DOXYGEN_FOUND)
         message(FATAL_ERROR "Doxygen was not found")
@@ -54,13 +55,18 @@ configure_package_config_file(CMake/wlppConfig.cmake.in
 
 write_basic_package_version_file(src/wlppConfigVersion.cmake
         VERSION ${wlpp_VERSION}
-        COMPATIBILITY SameMajorVersion)
+        COMPATIBILITY SameMinorVersion)
 
 # Add subdirectories -----------------------------------------------------------
 add_subdirectory(src)
 
 if(wlpp_BUILD_DOCS)
     add_subdirectory(docs)
+endif()
+
+if(wlpp_BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
 endif()
 
 # Install package and headers --------------------------------------------------

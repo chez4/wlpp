@@ -1,5 +1,7 @@
-# wlpp Copyright 2020 Max Burns
-# See LICENSE for more information.
+# Copyright (C) 2020-2021 Max Burns
+# See LICENSE for more information
+# wlpp   - CMake/FindXCB.cmake
+# Author - chez4 22/09/2020
 
 # Find XCB library using pkg-config --------------------------------------------
 # Sets the following variables:

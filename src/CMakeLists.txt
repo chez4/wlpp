@@ -1,8 +1,10 @@
-# wlpp Copyright 2020 Max Burns
-# See LICENSE for more information.
+# Copyright (C) 2020-2021 Max Burns
+# See LICENSE for more information
+# wlpp   - src/CMakeLists.txt
+# Author - chez4 20/09/2020
 
 # Add library ------------------------------------------------------------------
-add_library(wlpp window_api_error.cpp window.cpp)
+add_library(wlpp connection_error.cpp)
 
 target_include_directories(wlpp PUBLIC
         "$<BUILD_INTERFACE:${wlpp_SOURCE_DIR}/include>"
@@ -14,12 +16,11 @@ target_include_directories(wlpp PRIVATE
 
 # Choose platform-specific sources and libraries -------------------------------
 if(UNIX)
-    target_sources(wlpp PRIVATE xcb/xcb_connection.cpp xcb/xcb_window.cpp
-            xcb/xcb_screen.cpp)
+    target_sources(wlpp PRIVATE xcb/xcb_connection.cpp)
 
     target_link_libraries(wlpp PRIVATE ${PKG_XCB_LIBRARIES})
 elseif(WIN32)
-    target_sources(wlpp PRIVATE win32/win32_window.cpp)
+    target_sources(wlpp PRIVATE)
 
     target_link_libraries(wlpp PRIVATE Threads::Threads)
 endif()
@@ -33,7 +34,7 @@ set_target_properties(wlpp PROPERTIES
         SOVERSION ${wlpp_VERSION_MAJOR})
 
 # Install library --------------------------------------------------------------
-if(WLPP_INSTALL)
+if(wlpp_INSTALL)
     install(TARGETS wlpp
             EXPORT wlppTargets
             RUNTIME DESTINATION "bin"
