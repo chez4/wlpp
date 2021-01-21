@@ -25,8 +25,6 @@ public:
      * Constructs exception.
      *
      * @param[in] desc Description of error.
-     *
-     * @exceptsafe Will not throw exceptions.
      */
     explicit connection_error(std::string desc);
 

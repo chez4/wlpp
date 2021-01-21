@@ -5,6 +5,8 @@
 
 #include <wlpp/xcb/xcb_connection.hpp>
 
+#include <stdexcept>
+#include <string>
 #include <utility>
 
 #include <xcb/xcb.h>
@@ -13,34 +15,57 @@
 
 namespace wlpp {
 
-xcb_connection::xcb_connection()
-    : conn(xcb_connect(nullptr, nullptr))
+std::string xcb_connection::get_connection_error_string(int error)
 {
-    switch (xcb_connection_has_error(conn)) {
+    switch (error) {
         case 0:
-            break;
+            return "Success";
 
         case XCB_CONN_ERROR:
-            throw connection_error("XCB: Socket/pipe/stream error");
+            return "Socket/pipe/stream error";
 
         case XCB_CONN_CLOSED_EXT_NOTSUPPORTED:
-            throw connection_error("XCB: Extension unsupported");
+            return "Extension not supported";
 
         case XCB_CONN_CLOSED_MEM_INSUFFICIENT:
-            throw connection_error("XCB: Insufficient memory");
+            return "Insufficient memory";
 
         case XCB_CONN_CLOSED_REQ_LEN_EXCEED:
-            throw connection_error("XCB: Accepted server request length exceeded");
+            return "Accepted server request length exceeded";
 
         case XCB_CONN_CLOSED_PARSE_ERR:
-            throw connection_error("XCB: Error parsing display string");
+            return "Error parsing display string";
 
         case XCB_CONN_CLOSED_INVALID_SCREEN:
-            throw connection_error("XCB: No screen matching display on server");
+            return "No screen matching display on server";
 
         default:
-            throw connection_error("XCB: Unknown");
+            return "Unknown";
     }
+}
+
+xcb_connection::xcb_connection(const char *display, int *screen)
+    : conn(xcb_connect(display, screen))
+{
+    int error = xcb_connection_has_error(conn);
+    if (error != 0) {
+        xcb_disconnect(conn);
+        conn = nullptr;
+
+        if (error == XCB_CONN_CLOSED_PARSE_ERR)
+            throw std::invalid_argument(get_connection_error_string(error));
+        else
+            throw connection_error(get_connection_error_string(error));
+    }
+}
+
+xcb_connection::xcb_connection(const std::string &display, int screen)
+    : xcb_connection(display.c_str(), &screen)
+{
+}
+
+xcb_connection::xcb_connection(int screen) : xcb_connection(nullptr, &screen)
+{
 }
 
 xcb_connection::~xcb_connection()

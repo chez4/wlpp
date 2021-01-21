@@ -6,6 +6,8 @@
 #ifndef WLPP_XCB_CONNECTION_HPP
 #define WLPP_XCB_CONNECTION_HPP
 
+#include <string>
+
 #include <xcb/xcb.h>
 
 #include <wlpp/connection.hpp>
@@ -26,19 +28,37 @@ class xcb_connection : public connection<xcb_connection> {
 private:
     xcb_connection_t *conn;
 
+    static std::string get_connection_error_string(int);
+
+    xcb_connection(const char *, int *);
+
 public:
     /**
-     * Constructs connection.
+     * Connects to X server specified by @p display through XCB.
      *
-     * @exceptsafe Will not throw exceptions.
+     * A connection is made to the X server using XCB, and a &c xcb_connection
+     * is constructed. A screen number can be specified if one is preferred,
+     * otherwise the screen number will default to 0.
+     *
+     * @param [in] display Name of display.
+     * @param [in] screen Preferred screen number.
+     *
+     * @throws std::invalid_argument Thrown if @p display could not be parsed.
+     * @throws wlpp::connection_error Thrown if an error occured during
+     * connection to the X server.
      */
-    xcb_connection();
+    explicit xcb_connection(const std::string &display, int screen = 0);
 
     /**
-     * Destructs connection.
+     * Connects to X server through XCB, using the &c DISPLAY environment
+     * variable for the display.
      *
-     * @exceptsafe Will not throw exceptions.
+     * @param [in] screen Preferred screen number.
+     *
+     * @overload
      */
+    explicit xcb_connection(int screen = 0);
+
     ~xcb_connection();
 
     xcb_connection(const xcb_connection &) = delete;
@@ -47,8 +67,6 @@ public:
      * Constructs connection from move.
      *
      * @param[in, out] other Connection to move from.
-     *
-     * @exceptsafe Will not throw exceptions.
      */
     xcb_connection(xcb_connection &&other) noexcept;
 
@@ -58,8 +76,6 @@ public:
      * @param[in, out] other Connection to assign to.
      *
      * @returns Reference to this newly assigned connection.
-     *
-     * @exceptsafe Will not throw exceptions.
      */
     xcb_connection &operator=(xcb_connection other);
 
@@ -68,8 +84,6 @@ public:
      *
      * @param[in, out] a Swap operand.
      * @param[in, out] b Swap operand.
-     *
-     * @exceptsafe Will not throw exceptions.
      *
      * @relatesalso xcb_connection
      */
