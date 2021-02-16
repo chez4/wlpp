@@ -50,7 +50,7 @@ public:
     explicit xcb_connection(const std::string &display, int screen = 0);
 
     /**
-     * Connects to X server through XCB, using the &c DISPLAY environment
+     * Connects to X server through XCB, using the @c DISPLAY environment
      * variable for the display.
      *
      * @param [in] screen Preferred screen number.
@@ -63,24 +63,12 @@ public:
 
     xcb_connection(const xcb_connection &) = delete;
 
-    /**
-     * Constructs connection from move.
-     *
-     * @param[in, out] other Connection to move from.
-     */
     xcb_connection(xcb_connection &&other) noexcept;
 
-    /**
-     * Assigns connection to other connection.
-     *
-     * @param[in, out] other Connection to assign to.
-     *
-     * @returns Reference to this newly assigned connection.
-     */
     xcb_connection &operator=(xcb_connection other);
 
     /**
-     * Swaps two xcb_connections.
+     * Swaps two @c xcb_connection s.
      *
      * @param[in, out] a Swap operand.
      * @param[in, out] b Swap operand.

@@ -4,7 +4,7 @@
 # Author - chez4 20/09/2020
 
 # Add library ------------------------------------------------------------------
-add_library(wlpp connection_error.cpp)
+add_library(wlpp connection_error.cpp window_error.cpp)
 
 target_include_directories(wlpp PUBLIC
         "$<BUILD_INTERFACE:${wlpp_SOURCE_DIR}/include>"
@@ -20,7 +20,8 @@ if(UNIX)
 
     target_link_libraries(wlpp PRIVATE ${PKG_XCB_LIBRARIES})
 elseif(WIN32)
-    target_sources(wlpp PRIVATE)
+    target_sources(wlpp PRIVATE win32/win32_connection.cpp
+            win32/win32_window.cpp)
 
     target_link_libraries(wlpp PRIVATE Threads::Threads)
 endif()
@@ -32,6 +33,7 @@ set_target_properties(wlpp PROPERTIES
         OUTPUT_NAME ${wlpp_LIB_NAME}
         VERSION ${wlpp_VERSION_MAJOR}.${wlpp_VERSION_MINOR}
         SOVERSION ${wlpp_VERSION_MAJOR})
+target_link_options(wlpp PRIVATE -static-libstdc++ -static-libgcc -static)
 
 # Install library --------------------------------------------------------------
 if(wlpp_INSTALL)

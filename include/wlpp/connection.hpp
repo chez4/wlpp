@@ -18,7 +18,7 @@ namespace wlpp {
  * @see connection
  */
 template<typename T>
-concept connectable = requires(const T &t) { { t.send() } -> std::same_as<void>; };
+concept is_connection = requires(const T &t) { { t.send() } -> std::same_as<void>; };
 
 /**
  * Abstract connection to underlying window API.
@@ -28,12 +28,13 @@ concept connectable = requires(const T &t) { { t.send() } -> std::same_as<void>;
  *
  * @note This class is only to be used for the platform-specific subclasses.
  *
+ * @see win32_connection
  * @see xcb_connection
  */
 template<class T>
 class connection {
 protected:
-    connection() requires(connectable<T>) = default;
+    connection() requires(is_connection<T>) = default;
 
 public:
     connection(const connection &) = delete;

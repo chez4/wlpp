@@ -13,6 +13,7 @@ add_executable(test_window window.cpp)
 set_target_properties(test_window PROPERTIES
         CXX_STANDARD 20
         CXX_EXTENSIONS OFF)
-target_compile_options(test_window PRIVATE -Wextra -Wall -Wpedantic -march=native -flto)
+target_compile_options(test_window PRIVATE -O3 -flto)
+target_link_options(test_window PRIVATE -O3 -flto -static-libstdc++ -static-libgcc -static)
 
 add_test(window test_window)
