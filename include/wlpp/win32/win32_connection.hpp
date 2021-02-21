@@ -27,23 +27,22 @@ namespace wlpp {
  */
 class win32_connection : public connection<win32_connection> {
 private:
+
     HINSTANCE inst;
 
     WNDCLASS default_wc;
 
-    HINSTANCE &get_instance();
-
-    WNDCLASS &get_default_class();
+    static LRESULT CALLBACK window_callback(HWND, UINT, WPARAM, LPARAM);
 
 public:
+    friend class win32_window;
+
     /**
      * Connects to win32 API.
      *
      * Currently only obtains a @c HINSTANCE through @c GetModuleHandle() .
      */
     win32_connection();
-
-    friend class win32_window;
 
     /**
      * Swaps two @c win32_window s.

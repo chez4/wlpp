@@ -5,36 +5,25 @@
 
 #include <wlpp/win32/win32_connection.hpp>
 
+#include <windef.h>
 #include <winuser.h>
+
+#include <wlpp/win32/win32_window.hpp>
 
 namespace wlpp {
 
-// temporary
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK win32_connection::window_callback(HWND hwnd, UINT msg, WPARAM w_param, LPARAM l_param)
 {
-    switch (uMsg) {
-        case WM_DESTROY:
-            PostQuitMessage(0);
-            return 0;
-    }
-    return DefWindowProc(hwnd, uMsg, wParam, lParam);
-}
-
-HINSTANCE &win32_connection::get_instance()
-{
-    return inst;
-}
-
-WNDCLASS &win32_connection::get_default_class()
-{
-    return default_wc;
+    win32_window *wind = (win32_window *) GetWindowLongPtr(hwnd, GWLP_USERDATA);
+    if (wind == nullptr) return DefWindowProc(hwnd, msg, w_param, l_param);
+    else return wind->callback(hwnd, msg, w_param, l_param);
 }
 
 win32_connection::win32_connection()
     : inst(GetModuleHandle(nullptr))
     , default_wc()
 {
-    default_wc.lpfnWndProc = WindowProc;
+    default_wc.lpfnWndProc = window_callback;
     default_wc.hInstance = inst;
     default_wc.lpszClassName = "wlpp Default Class";
     RegisterClass(&default_wc);

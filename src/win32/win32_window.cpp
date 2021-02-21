@@ -7,6 +7,7 @@
 
 #include <memory>
 
+#include <windef.h>
 #include <winuser.h>
 
 #include <wlpp/win32/win32_connection.hpp>
@@ -14,9 +15,19 @@
 
 namespace wlpp {
 
+LRESULT CALLBACK win32_window::callback(HWND hwnd, UINT msg, WPARAM w_param, LPARAM l_param)
+{
+    switch (msg) {
+        case WM_DESTROY:
+            PostQuitMessage(0);
+            return 0;
+    }
+    return DefWindowProc(hwnd, msg, w_param, l_param);
+}
+
 win32_window::win32_window(std::shared_ptr<win32_connection> conn, int width, int height, int x, int y, const std::string &title)
     : conn(std::move(conn))
-    , wind(CreateWindowEx(0, this->conn->get_default_class().lpszClassName, title.c_str(), WS_OVERLAPPEDWINDOW, x, y, width, height, nullptr, nullptr, this->conn->get_instance(), nullptr))
+    , wind(CreateWindowEx(0, this->conn->default_wc.lpszClassName, title.c_str(), WS_OVERLAPPEDWINDOW, x, y, width, height, nullptr, nullptr, this->conn->inst, nullptr))
     , shown(false)
 {
     if (wind == nullptr) {

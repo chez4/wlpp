@@ -34,6 +34,10 @@ private:
 
     mutable bool shown;
 
+    friend LRESULT CALLBACK win32_connection::window_callback(HWND hwnd, UINT msg, WPARAM w_param, LPARAM l_param);
+
+    LRESULT CALLBACK callback(HWND, UINT, WPARAM, LPARAM);
+
 public:
     /**
      * Instantiates window object with size and position.
@@ -48,7 +52,7 @@ public:
      * @param [in] height Height in pixels of window.
      * @param [in] x X coordinate of top-left corner of window.
      * @param [in] y Y coordinate of top-left corner of window.
-     * @param [in] title Title to associate to window.
+     * @param [in] title Title to associate with window.
      *
      * @throws wlpp::window_error Thrown if the window failed to create.
      */
