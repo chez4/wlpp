@@ -18,7 +18,12 @@ namespace wlpp {
  * @see connection
  */
 template<typename T>
-concept is_connection = requires(const T &t) { { t.send() } -> std::same_as<void>; };
+concept is_connection = requires(const T &t) {
+    { t.send() } -> std::same_as<void>;
+    { t.wait_events() } -> std::same_as<void>;
+    { t.poll_events() } -> std::same_as<void>;
+    { t.has_closed() } -> std::same_as<bool>;
+};
 
 /**
  * Abstract connection to underlying window API.

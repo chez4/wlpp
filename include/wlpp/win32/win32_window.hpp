@@ -33,10 +33,11 @@ private:
     HWND wind;
 
     mutable bool shown;
+    mutable bool quit;
 
     friend LRESULT CALLBACK win32_connection::window_callback(HWND hwnd, UINT msg, WPARAM w_param, LPARAM l_param);
 
-    LRESULT CALLBACK callback(HWND, UINT, WPARAM, LPARAM);
+    LRESULT CALLBACK callback(UINT, WPARAM, LPARAM);
 
 public:
     /**
@@ -99,6 +100,13 @@ public:
      * Makes window invisible on screen.
      */
     void hide() const;
+
+    /**
+     * Returns whether the window has been destroyed.
+     *
+     * @return True if window has been destroyed.
+     */
+    bool has_quit() const;
 };
 
 }

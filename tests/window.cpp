@@ -13,8 +13,11 @@ int main()
     std::shared_ptr<wlpp::win32_connection> server = std::make_shared<wlpp::win32_connection>();
 
     wlpp::win32_window window(server, "Test Window");
-    window.show();
 
+    window.show();
+    while (!server->has_closed()) {
+        server->poll_events();
+    }
     window.hide();
 
     return 0;

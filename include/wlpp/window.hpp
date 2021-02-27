@@ -21,6 +21,7 @@ template<typename T>
 concept is_window = requires(const T &t) {
     { t.show() } -> std::same_as<void>;
     { t.hide() } -> std::same_as<void>;
+    { t.has_quit() } -> std::same_as<bool>;
 };
 
 /**

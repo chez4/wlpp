@@ -27,10 +27,13 @@ namespace wlpp {
  */
 class win32_connection : public connection<win32_connection> {
 private:
-
     HINSTANCE inst;
 
     WNDCLASS default_wc;
+
+    mutable bool closed;
+
+    static std::string get_last_error_string();
 
     static LRESULT CALLBACK window_callback(HWND, UINT, WPARAM, LPARAM);
 
@@ -45,14 +48,40 @@ public:
     win32_connection();
 
     /**
-     * Swaps two @c win32_window s.
+     * Flushes all pending messages to connection.
      *
-     * @param[in, out] a Swap operand.
-     * @param[in, out] b Swap operand.
-     *
-     * @relatesalso win32_window
+     * Currently serves no purpose on win32 platforms, and can be safely
+     * ignored.
      */
     void send() const;
+
+    /**
+     * Handles the next event on the calling thread's event queue, blocking the
+     * thread if a message is not yet present.
+     *
+     * This function will block the current thread if no messages are present,
+     * returning when the next posted event has been handled.
+     *
+     * @throws wlpp::connection_error Thrown if there was an error handling
+     * the event.
+     */
+    void wait_events() const;
+
+    /**
+     * Handles the next event on the calling thread's event queue, returning if
+     * no messages are present.
+     *
+     * This function will not block the current thread if no messages are
+     * present, returning immediately.
+     */
+    void poll_events() const;
+
+    /**
+     * Returns whether the connection to the API has been closed.
+     *
+     * @return True if connection has been closed.
+     */
+    bool has_closed() const;
 };
 
 }

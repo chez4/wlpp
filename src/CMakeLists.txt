@@ -33,7 +33,6 @@ set_target_properties(wlpp PROPERTIES
         OUTPUT_NAME ${wlpp_LIB_NAME}
         VERSION ${wlpp_VERSION_MAJOR}.${wlpp_VERSION_MINOR}
         SOVERSION ${wlpp_VERSION_MAJOR})
-target_link_options(wlpp PRIVATE -static-libstdc++ -static-libgcc -static)
 
 # Install library --------------------------------------------------------------
 if(wlpp_INSTALL)
