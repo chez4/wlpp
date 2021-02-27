@@ -30,14 +30,14 @@ class win32_window : public window<win32_window> {
 private:
     std::shared_ptr<win32_connection> conn;
 
-    HWND wind;
+    ::HWND wind;
 
     mutable bool shown;
     mutable bool quit;
 
-    friend LRESULT CALLBACK win32_connection::window_callback(HWND hwnd, UINT msg, WPARAM w_param, LPARAM l_param);
+    friend ::LRESULT CALLBACK win32_connection::window_callback(::HWND hwnd, ::UINT msg, ::WPARAM w_param, ::LPARAM l_param);
 
-    LRESULT CALLBACK callback(UINT, WPARAM, LPARAM);
+    ::LRESULT CALLBACK callback(::UINT, ::WPARAM, ::LPARAM);
 
 public:
     /**

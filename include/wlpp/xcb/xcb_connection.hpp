@@ -26,7 +26,7 @@ namespace wlpp {
  */
 class xcb_connection : public connection<xcb_connection> {
 private:
-    xcb_connection_t *conn;
+    ::xcb_connection_t *conn;
 
     static std::string get_connection_error_string(int);
 

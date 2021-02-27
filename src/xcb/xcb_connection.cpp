@@ -45,11 +45,11 @@ std::string xcb_connection::get_connection_error_string(int error)
 }
 
 xcb_connection::xcb_connection(const char *display, int *screen)
-    : conn(xcb_connect(display, screen))
+    : conn(::xcb_connect(display, screen))
 {
-    int error = xcb_connection_has_error(conn);
+    int error = ::xcb_connection_has_error(conn);
     if (error != 0) {
-        xcb_disconnect(conn);
+        ::xcb_disconnect(conn);
         conn = nullptr;
 
         if (error == XCB_CONN_CLOSED_PARSE_ERR)
@@ -70,7 +70,7 @@ xcb_connection::xcb_connection(int screen) : xcb_connection(nullptr, &screen)
 
 xcb_connection::~xcb_connection()
 {
-    xcb_disconnect(conn);
+    ::xcb_disconnect(conn);
 }
 
 xcb_connection::xcb_connection(xcb_connection &&other) noexcept
@@ -92,7 +92,7 @@ void swap(xcb_connection &a, xcb_connection &b)
 
 void xcb_connection::send() const
 {
-    xcb_flush(conn);
+    ::xcb_flush(conn);
 }
 
 }

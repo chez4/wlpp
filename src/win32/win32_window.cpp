@@ -15,15 +15,15 @@
 
 namespace wlpp {
 
-LRESULT CALLBACK win32_window::callback(UINT msg, WPARAM w_param, LPARAM l_param)
+::LRESULT CALLBACK win32_window::callback(::UINT msg, ::WPARAM w_param, ::LPARAM l_param)
 {
     switch (msg) {
         case WM_DESTROY:
-            PostQuitMessage(0);
+            ::PostQuitMessage(0);
             quit = true;
             return 0;
     }
-    return DefWindowProc(wind, msg, w_param, l_param);
+    return ::DefWindowProc(wind, msg, w_param, l_param);
 }
 
 win32_window::win32_window(std::shared_ptr<win32_connection> conn, int width, int height, int x, int y, const std::string &title)
@@ -35,7 +35,7 @@ win32_window::win32_window(std::shared_ptr<win32_connection> conn, int width, in
     if (wind == nullptr)
         throw window_error(win32_connection::get_last_error_string());
 
-    SetWindowLongPtr(wind, GWLP_USERDATA, (LONG_PTR) this);
+    ::SetWindowLongPtr(wind, GWLP_USERDATA, (::LONG_PTR) this);
 }
 
 win32_window::win32_window(std::shared_ptr<win32_connection> conn, int width, int height, const std::string &title)
@@ -60,7 +60,7 @@ win32_window::win32_window(win32_window &&other) noexcept
 
 win32_window::~win32_window()
 {
-    if (wind != nullptr) DestroyWindow(wind);
+    if (wind != nullptr) ::DestroyWindow(wind);
 }
 
 win32_window &win32_window::operator=(win32_window other)
@@ -79,13 +79,13 @@ void swap(win32_window &a, win32_window &b)
 
 void win32_window::show() const
 {
-    ShowWindow(wind, shown ? SW_SHOW : SW_SHOWNORMAL);
+    ::ShowWindow(wind, shown ? SW_SHOW : SW_SHOWNORMAL);
     shown = true;
 }
 
 void win32_window::hide() const
 {
-    ShowWindow(wind, SW_HIDE);
+    ::ShowWindow(wind, SW_HIDE);
 }
 
 bool win32_window::has_quit() const
