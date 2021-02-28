@@ -19,6 +19,7 @@ namespace wlpp {
  */
 template<typename T>
 concept is_window = requires(const T &t) {
+    { t.set_title(std::declval<const std::string &>()) } -> std::same_as<void>;
     { t.show() } -> std::same_as<void>;
     { t.hide() } -> std::same_as<void>;
     { t.has_quit() } -> std::same_as<bool>;

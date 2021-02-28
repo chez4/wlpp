@@ -9,6 +9,8 @@
 #include <string>
 #include <utility>
 
+#include <cstdint>
+
 #include <xcb/xcb.h>
 
 #include <wlpp/connection_error.hpp>
@@ -44,19 +46,47 @@ std::string xcb_connection::get_connection_error_string(int error)
     }
 }
 
-xcb_connection::xcb_connection(const char *display, int *screen)
-    : conn(::xcb_connect(display, screen))
+xcb_connection::xcb_connection(const char *display, const int *screen)
+    : screen_pref(*screen)
+    , conn(::xcb_connect(display, &screen_pref))
 {
     int error = ::xcb_connection_has_error(conn);
     if (error != 0) {
-        ::xcb_disconnect(conn);
-        conn = nullptr;
-
         if (error == XCB_CONN_CLOSED_PARSE_ERR)
             throw std::invalid_argument(get_connection_error_string(error));
         else
             throw connection_error(get_connection_error_string(error));
     }
+
+    setup = ::xcb_get_setup(conn);
+}
+
+xcb_connection_t *xcb_connection::get() const
+{
+    return conn;
+}
+
+std::uint32_t xcb_connection::generate_id() const
+{
+    return ::xcb_generate_id(conn);
+}
+
+::xcb_screen_t xcb_connection::get_screen(int num) const
+{
+    ::xcb_screen_iterator_t iter = ::xcb_setup_roots_iterator(setup);
+    int screens = iter.rem;
+    while (iter.rem >= 0) {
+        if (num == screens - iter.rem)
+            return *iter.data;
+        ::xcb_screen_next(&iter);
+    }
+
+    throw connection_error("Requested screen \"" + std::to_string(num) + "\" was not found on X connection");
+}
+
+::xcb_screen_t xcb_connection::get_preffered_screen() const
+{
+    return get_screen(screen_pref);
 }
 
 xcb_connection::xcb_connection(const std::string &display, int screen)
@@ -64,19 +94,24 @@ xcb_connection::xcb_connection(const std::string &display, int screen)
 {
 }
 
-xcb_connection::xcb_connection(int screen) : xcb_connection(nullptr, &screen)
+
+xcb_connection::xcb_connection(int screen)
+    : xcb_connection(nullptr, &screen)
 {
 }
 
 xcb_connection::~xcb_connection()
 {
-    ::xcb_disconnect(conn);
+    if (conn != nullptr) ::xcb_disconnect(conn);
 }
 
 xcb_connection::xcb_connection(xcb_connection &&other) noexcept
-    : conn(other.conn)
+    : screen_pref(other.screen_pref)
+    , conn(other.conn)
+    , setup(other.setup)
 {
     other.conn = nullptr;
+    other.setup = nullptr;
 }
 
 xcb_connection &xcb_connection::operator=(xcb_connection other)
@@ -87,12 +122,29 @@ xcb_connection &xcb_connection::operator=(xcb_connection other)
 
 void swap(xcb_connection &a, xcb_connection &b)
 {
+    std::swap(a.screen_pref, b.screen_pref);
     std::swap(a.conn, b.conn);
+    std::swap(a.setup, b.setup);
 }
 
 void xcb_connection::send() const
 {
     ::xcb_flush(conn);
+}
+
+void xcb_connection::wait_events() const
+{
+
+}
+
+void xcb_connection::poll_events() const
+{
+
+}
+
+bool xcb_connection::has_closed() const
+{
+    return false;
 }
 
 }

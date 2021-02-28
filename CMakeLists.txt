@@ -8,8 +8,8 @@ cmake_minimum_required(VERSION 3.14)
 project(wlpp VERSION 0.1.0 LANGUAGES CXX)
 
 # Options ----------------------------------------------------------------------
-option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
-option(wlpp_BUILD_DOCS "Build Doxygen documentation" OFF)
+option(BUILD_SHARED_LIBS "Build shared libraries" ON)
+option(wlpp_BUILD_DOCS "Build Doxygen documentation" ON)
 option(wlpp_BUILD_TESTS "Build unit tests" ON)
 option(wlpp_INSTALL "Generate installation target" ON)
 

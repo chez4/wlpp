@@ -6,6 +6,8 @@
 #include <wlpp/win32/win32_window.hpp>
 
 #include <memory>
+#include <string>
+#include <utility>
 
 #include <windef.h>
 #include <winuser.h>

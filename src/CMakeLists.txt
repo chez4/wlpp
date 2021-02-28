@@ -16,7 +16,7 @@ target_include_directories(wlpp PRIVATE
 
 # Choose platform-specific sources and libraries -------------------------------
 if(UNIX)
-    target_sources(wlpp PRIVATE xcb/xcb_connection.cpp)
+    target_sources(wlpp PRIVATE xcb/xcb_connection.cpp xcb/xcb_window.cpp)
 
     target_link_libraries(wlpp PRIVATE ${PKG_XCB_LIBRARIES})
 elseif(WIN32)

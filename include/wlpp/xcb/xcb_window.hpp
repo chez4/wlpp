@@ -1,49 +1,43 @@
 // Copyright (C) 2020-2021 Max Burns
 // See LICENSE for more information
-// wlpp   - include/wlpp/win32/win32_window.hpp
-// Author - chez4 22/09/2020
+// wlpp   - include/wlpp/xcb/xcb_window.hpp
+// Author - chez4 20/09/2020
 
-#ifndef WLPP_WIN32_WINDOW_HPP
-#define WLPP_WIN32_WINDOW_HPP
+#ifndef WLPP_XCB_WINDOW_HPP
+#define WLPP_XCB_WINDOW_HPP
 
 #include <memory>
-#include <string>
 
-#include <windef.h>
+#include <xcb/xcb.h>
 
-#include <wlpp/win32/win32_connection.hpp>
 #include <wlpp/window.hpp>
+#include <wlpp/xcb/xcb_connection.hpp>
 
 namespace wlpp {
 
 /**
- * Window object using win32 API.
+ * Window object using XCB API.
  *
  * Acts as a dynamic window object bound through a @c connection.
  *
- * @warning This class and header should only be used on a platform using win32.
+ * @warning This class and header should only be used on a platform using X11.
  *
  * @see window
  * @see connection
  */
-class win32_window : public window<win32_window> {
+class xcb_window : window<xcb_window> {
 private:
-    friend ::LRESULT CALLBACK win32_connection::window_callback(::HWND, ::UINT, ::WPARAM, ::LPARAM);
+    std::shared_ptr<xcb_connection> conn;
 
-    std::shared_ptr<win32_connection> conn;
+    ::xcb_window_t wind;
 
-    ::HWND wind;
-
-    mutable bool shown;
-    mutable bool quit;
-
-    ::LRESULT CALLBACK callback(::UINT, ::WPARAM, ::LPARAM);
+    ::xcb_screen_t screen;
 
 public:
     /**
      * Instantiates window object with size and position.
      *
-     * Constructs a win32 window at specified position using @p x and @p y , and
+     * Constructs a XCB window at specified position using @p x and @p y , and
      * with size @p width pixels x @p height pixels. A title will be associated
      * with the window if specified by @title , otherwise it will be blank. This
      * window will be tied to the shared @p conn passed to it.
@@ -55,9 +49,10 @@ public:
      * @param [in] y Y coordinate of top-left corner of window.
      * @param [in] title Title to associate with window.
      *
-     * @throws wlpp::window_error Thrown if the window failed to create.
+     * @throws wlpp::connection_error Thrown if the requested screen was not
+     * found.
      */
-    win32_window(std::shared_ptr<win32_connection> conn, int width, int height, int x, int y, const std::string &title = "");
+    xcb_window(std::shared_ptr<xcb_connection> conn, int width, int height, int x, int y, const std::string &title = "");
 
     /**
      * Instantiates window object with size.
@@ -69,7 +64,7 @@ public:
      *
      * @overload
      */
-    win32_window(std::shared_ptr<win32_connection> conn, int width, int height, const std::string &title = "");
+    xcb_window(std::shared_ptr<xcb_connection> conn, int width, int height, const std::string &title = "");
 
     /**
      * Instantiates window object.
@@ -79,25 +74,32 @@ public:
      *
      * @overload
      */
-    explicit win32_window(std::shared_ptr<win32_connection> conn, const std::string &title = "");
+    explicit xcb_window(std::shared_ptr<xcb_connection> conn, const std::string &title = "");
 
-    ~win32_window();
+    ~xcb_window();
 
-    win32_window(const win32_window &) = delete;
+    xcb_window(const xcb_window &) = delete;
 
-    win32_window(win32_window &&other) noexcept;
+    xcb_window(xcb_window &&other) noexcept;
 
-    win32_window &operator=(win32_window other);
+    xcb_window &operator=(xcb_window other);
 
     /**
-     * Swaps two @c win32_window s.
+     * Swaps two @c xcb_window s.
      *
      * @param[in, out] a Swap operand.
      * @param[in, out] b Swap operand.
      *
-     * @relatesalso win32_window
+     * @relatesalso xcb_window
      */
-    friend void swap(win32_window &a, win32_window &b);
+    friend void swap(xcb_window &a, xcb_window &b);
+
+    /**
+     * Sets the title of the window to @p title .
+     *
+     * @param[in] title Title to associate with window.
+     */
+    void set_title(const std::string &title) const;
 
     /**
      * Makes window visible on screen.
@@ -119,4 +121,4 @@ public:
 
 }
 
-#endif //WLPP_WIN32_WINDOW_HPP
+#endif // WLPP_XCB_WINDOW_HPP

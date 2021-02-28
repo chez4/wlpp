@@ -8,6 +8,8 @@
 
 #include <string>
 
+#include <cstdint>
+
 #include <xcb/xcb.h>
 
 #include <wlpp/connection.hpp>
@@ -26,13 +28,27 @@ namespace wlpp {
  */
 class xcb_connection : public connection<xcb_connection> {
 private:
-    ::xcb_connection_t *conn;
-
     static std::string get_connection_error_string(int);
 
-    xcb_connection(const char *, int *);
+    int screen_pref;
+
+    ::xcb_connection_t *conn;
+
+    const ::xcb_setup_t *setup;
+
+    xcb_connection(const char *, const int *);
+
+    xcb_connection_t *get() const;
+
+    std::uint32_t generate_id() const;
+
+    ::xcb_screen_t get_screen(int) const;
+
+    ::xcb_screen_t get_preffered_screen() const;
 
 public:
+    friend class xcb_window;
+
     /**
      * Connects to X server specified by @p display through XCB.
      *
@@ -77,7 +93,18 @@ public:
      */
     friend void swap(xcb_connection &a, xcb_connection &b);
 
+    /**
+     * Flushes all pending messages to connection.
+     *
+     * Should be called after most operations.
+     */
     void send() const;
+
+    void wait_events() const;
+
+    void poll_events() const;
+
+    bool has_closed() const;
 };
 
 }

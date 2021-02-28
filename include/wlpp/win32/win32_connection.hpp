@@ -27,15 +27,15 @@ namespace wlpp {
  */
 class win32_connection : public connection<win32_connection> {
 private:
+    static std::string get_last_error_string();
+
+    static ::LRESULT CALLBACK window_callback(::HWND, ::UINT, ::WPARAM, ::LPARAM);
+
     ::HINSTANCE inst;
 
     ::WNDCLASS default_wc;
 
     mutable bool closed;
-
-    static std::string get_last_error_string();
-
-    static ::LRESULT CALLBACK window_callback(::HWND, ::UINT, ::WPARAM, ::LPARAM);
 
 public:
     friend class win32_window;
